@@ -8,6 +8,8 @@
 			SCREEN_HEIGHT = 720;
 			FPS = 60;
 
+			let data = [];
+
 			function initialize()
 			{
 				console.log("Initializing.");
@@ -16,7 +18,21 @@
 				canvas.width = SCREEN_WIDTH;
 				canvas.height = SCREEN_HEIGHT;
 				clearGameWindow();
+				addPlayer();
 				start();
+			}
+
+			function addPlayer()
+			{
+				data.push({
+					type: "player",
+					x: 500,
+					y: 500,
+					width: 10,
+					height: 10,
+					velocityX: 3,
+					velocityY: 5
+				});
 			}
 
 			//This function draws the background of the game window.
@@ -56,13 +72,33 @@
 			//all physics calculations will go in here.
 			function tick()
 			{
-
+				data.forEach(node => {
+					if(node.type == "player")
+					{
+						if(node.x > SCREEN_WIDTH || node.x < 0)
+							node.velocityX = -node.velocityX;
+						if(node.y > SCREEN_HEIGHT || node.y < 0)
+							node.velocityY = -node.velocityY;
+						node.x += node.velocityX;
+						node.y += node.velocityY;
+					}
+				});
 			}
 
 			//all gamewindow drawing will go in here.
 			function render()
 			{
+				let canvas = document.getElementById("gamewindow");
+				let ctx = canvas.getContext("2d");
+				//first draw the background.
+				clearGameWindow();
 
+				//draw the game nodes, like players and enemies.
+				data.forEach(node => {
+					if(node.type == "player")
+						ctx.fillStyle = "green";
+					ctx.fillRect(node.x, node.y, node.width, node.height);
+				});
 			}
 			
 		</script>
