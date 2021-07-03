@@ -2,9 +2,72 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title></title>
+		<title>Tower Defense</title>
+		<script>
+			SCREEN_WIDTH = 1280;
+			SCREEN_HEIGHT = 720;
+			FPS = 60;
+
+			function initialize()
+			{
+				console.log("Initializing.");
+				//sets the size of the canvas.
+				let canvas = document.getElementById("gamewindow");
+				canvas.width = SCREEN_WIDTH;
+				canvas.height = SCREEN_HEIGHT;
+				clearGameWindow();
+				start();
+			}
+
+			//This function draws the background of the game window.
+			function clearGameWindow()
+			{
+			 	let canvas = document.getElementById("gamewindow");
+				let ctx = canvas.getContext("2d");
+				ctx.fillStyle = "#000000";
+				ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+			}
+
+			function sleep(ms)
+			{
+				return new Promise(resolve => setTimeout(resolve, ms));
+			}
+
+			//maingame loop function
+			async function start()
+			{
+				let previousTime = Date.now();
+				while(true)
+				{
+					tick();
+					render();
+					//calculate the time needed to sleep based on the FPS.
+					let singleFrameTime = (1.0/FPS) * 1000; //calculate the maximum number of ms perframe.
+					let currentTime = Date.now();
+					let timePassed = currentTime - previousTime;
+					let sleepTime = singleFrameTime - timePassed;
+					if(sleepTime > 0)
+						await sleep(sleepTime);
+					previousTime = Date.now();
+					//console.log(sleepTime);
+				}
+			}
+
+			//all physics calculations will go in here.
+			function tick()
+			{
+
+			}
+
+			//all gamewindow drawing will go in here.
+			function render()
+			{
+
+			}
+			
+		</script>
 	</head>
-	<body>
-        
+	<body onload="initialize();">
+		<canvas id = "gamewindow"></canvas>
 	</body>
 </html>
