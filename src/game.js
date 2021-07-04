@@ -20,10 +20,11 @@ function initialize()
 }
 
 
-//maingame loop function
+/**maingame loop function*/
 async function start()
 {
     let previousTime = Date.now(); //gets the current time in milliseconds
+    let x = 1;
     //scuffed game loop.
     while(true)
     {
@@ -34,6 +35,7 @@ async function start()
         let currentTime = Date.now();
         let timePassed = currentTime - previousTime;
         let sleepTime = singleFrameTime - timePassed;
+        //console.log(sleepTime);
         if(sleepTime > 0)
             await sleep(sleepTime);
         previousTime = Date.now();
@@ -46,13 +48,13 @@ function tick()
     data.forEach(node => {
         if(node.type == "player")
         {
-            if(node.x > SCREEN_WIDTH || node.x < 0)
+            if(node.x > (SCREEN_WIDTH - 10) || node.x < 0)
                 node.velocityX = -node.velocityX;
-            if(node.y > SCREEN_HEIGHT || node.y < 0)
+            if(node.y > (SCREEN_HEIGHT - 10) || node.y < 0)
                 node.velocityY = -node.velocityY;
-            node.x += node.velocityX;
-            node.y += node.velocityY;
         }
+        node.x += node.velocityX;
+        node.y += node.velocityY;
     });
 }
 
@@ -79,7 +81,7 @@ function clearGameWindow()
 {
     let canvas = document.getElementById("gamewindow");
     let ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#000000";
+    ctx.fillStyle = "#213400";
     ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
