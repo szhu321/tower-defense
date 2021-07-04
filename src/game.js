@@ -5,6 +5,7 @@ SCREEN_HEIGHT = 720;
 FPS = 60;
 
 let data = [];
+let input;
 
 //The code gets called here.
 function initialize()
@@ -14,6 +15,7 @@ function initialize()
     let canvas = document.getElementById("gamewindow");
     canvas.width = SCREEN_WIDTH;
     canvas.height = SCREEN_HEIGHT;
+    input = new Input(canvas);
     clearGameWindow();
     addPlayer();
     start();
@@ -48,13 +50,31 @@ function tick()
     data.forEach(node => {
         if(node.type == "player")
         {
-            if(node.x > (SCREEN_WIDTH - 10) || node.x < 0)
-                node.velocityX = -node.velocityX;
-            if(node.y > (SCREEN_HEIGHT - 10) || node.y < 0)
-                node.velocityY = -node.velocityY;
+            let mousePos = input.getMousePosition();
+            
+            //checks to see if any of the control keys are pressed or not.
+            if(input.isKeyPressed("w"))
+                node.velocityY = -5;
+            else if(input.isKeyPressed("s"))
+                node.velocityY = 5;
+            else
+                node.velocityY = 0;
+            if(input.isKeyPressed("a"))
+                node.velocityX = -5;
+            else if(input.isKeyPressed("d"))
+                node.velocityX = 5;
+            else
+                node.velocityX = 0;
+
+            
         }
         node.x += node.velocityX;
         node.y += node.velocityY;
+        // if(node.x > (SCREEN_WIDTH - 10) || node.x < 0)
+        //     node.x = 0;
+        // if(node.y > (SCREEN_HEIGHT - 10) || node.y < 0)
+        //     node.velocityY = 0;
+        
     });
 }
 
