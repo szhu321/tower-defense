@@ -4,6 +4,7 @@ class Input
     mouseX = 0;
     mouseY = 0;
     keys = {};
+    mousePressed = false;
 
     constructor(canvasElement)
     {
@@ -18,16 +19,24 @@ class Input
         }, false);
         canvasElement.addEventListener("click", (e)=>{
             //console.log("click", e);
-            let xv = e.offsetX;
-            let yv = e.offsetY;
-            let length = Math.sqrt(Math.pow(xv, 2) + Math.pow(yv, 2));
-            addBullet(0, 0, (xv/length) * 4, (yv/length) * 4);
+            events.push({
+                type: "mouseclick",
+                data: e,
+            });
         }, false);
         canvasElement.addEventListener("mousemove", (e)=>
         {
             //when the mouse moves store the position of the mouse so that it can be used later.
             this.mouseX = e.offsetX;
             this.mouseY = e.offsetY;
+        });
+        canvasElement.addEventListener("mousedown", (e)=>
+        {
+            this.mousePressed = true;
+        });
+        canvasElement.addEventListener("mouseup", (e)=>
+        {
+            this.mousePressed = false;
         });
         
     }
@@ -43,5 +52,10 @@ class Input
         if(this.keys[key] == true)
             return true;
         return false;
+    }
+
+    isMousePressed()
+    {
+        return this.mousePressed;
     }
 }

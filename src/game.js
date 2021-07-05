@@ -5,6 +5,8 @@ SCREEN_HEIGHT = 720;
 FPS = 60;
 
 let data = [];
+let events = [];
+let currentPlayer;
 let input;
 
 //The code gets called here.
@@ -17,7 +19,7 @@ function initialize()
     canvas.height = SCREEN_HEIGHT;
     input = new Input(canvas);
     clearGameWindow();
-    addPlayer();
+    currentPlayer = addPlayer();
     addEnemy(800, 500);
     addEnemy(400, 300);
     addEnemy(200, 390);
@@ -40,7 +42,7 @@ async function start()
         let currentTime = Date.now();
         let timePassed = currentTime - previousTime;
         let sleepTime = singleFrameTime - timePassed;
-        //console.log(sleepTime);
+        console.log(sleepTime);
         if(sleepTime > 0)
             await sleep(sleepTime);
         previousTime = Date.now();
@@ -50,6 +52,26 @@ async function start()
 //all physics calculations will go in here.
 function tick()
 {
+    //handle events.
+    while(events.length > 0)
+    {
+        let curentEvent = events.pop();
+        if(curentEvent.type == "mouseclick")
+        {
+            
+        }
+    }
+
+    if(input.isMousePressed())
+    {
+        let e = input.getMousePosition();
+        let xv = e.x - currentPlayer.x;
+        let yv = e.y - currentPlayer.y;
+        let length = Math.sqrt(Math.pow(xv, 2) + Math.pow(yv, 2));
+        addBullet(currentPlayer.x + currentPlayer.width / 2, currentPlayer.y + currentPlayer.height / 2, (xv/length) * 4, (yv/length) * 4);
+    }
+    
+
     data.forEach(node => {
         //Changing the velocity.
         if(node.type == "player")
@@ -69,6 +91,14 @@ function tick()
                 node.velocityX = 5;
             else
                 node.velocityX = 0;
+        }
+
+        if(node.type == "bullet")
+        {
+            if(node.x > SCREEN_WIDTH - 20 || node.x < 20)
+                node.velocityX = -node.velocityX;
+            if(node.y > SCREEN_HEIGHT - 20|| node.y < 20)
+                node.velocityY = -node.velocityY;
         }
 
         //then collision detection.
@@ -152,6 +182,7 @@ function addParticle(x, y)
 function addBullet(x, y, xv, yv)
 {
     let bullet = addNode("bullet", x, y, 5, 5);
+    bullet.physical = false;
     bullet.velocityX = xv;
     bullet.velocityY = yv;
 }
@@ -171,7 +202,7 @@ function addNode(type, x, y, width, height)
         physical: false,
     };
     data.push(node);
-    console.log(data);
+    //console.log(data);
     return node;
 }
 
@@ -181,21 +212,22 @@ function checkCollisions()
     //check for collisions with the game border.
     data.forEach((node) => 
     {
-        if(node.type == "player")
-        {
+        
             //check with left and right boundary.
             if(node.x + node.velocityX < 0 || (node.x + node.velocityX) + node.width > SCREEN_WIDTH)
                 node.velocityX = 0;
             //check with the top and bottom boundary.
             if(node.y + node.velocityY < 0 || node.y + node.velocityY + node.height > SCREEN_HEIGHT)
                 node.velocityY = 0;
-        }
+        
     });
 
     //check for collisions with other physical objects.
     for(let i = 0; i < data.length; i++)
     {
         let currentNode = data[i];
+        if(currentNode.physical == false)
+            continue;
         for(let j = 0; i < data.length; j++)
         {
             let otherNode = data[j];
