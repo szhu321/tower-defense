@@ -18,7 +18,6 @@ function initialize()
     input = new Input(canvas);
     clearGameWindow();
     addPlayer();
-    addEnemy(10, 20);
     addEnemy(800, 500);
     addEnemy(400, 300);
     addEnemy(200, 390);
@@ -71,6 +70,7 @@ function tick()
             else
                 node.velocityX = 0;
         }
+
         //then collision detection.
         checkCollisions();
 
@@ -96,6 +96,8 @@ function render()
                 ctx.fillStyle = "green";
             if(node.type == "enemy")
                 ctx.fillStyle = "red";
+            if(node.type == "bullet")
+                ctx.fillStyle = "white";
             ctx.fillRect(node.x, node.y, node.width, node.height);
         }
     });
@@ -136,6 +138,22 @@ function addEnemy(x, y)
     let enemy = addNode("enemy", x, y, 20, 20);
     enemy.physical = true;
     return enemy;
+}
+
+/**add a still particle that will degrade over time */
+function addParticle(x, y)
+{
+    let particle = addNode("particle", x, y, 2, 2);
+    particle.physical = false;
+    particle.hp = 120;
+}
+
+/**creates a bullet at the given start location and velocity */
+function addBullet(x, y, xv, yv)
+{
+    let bullet = addNode("bullet", x, y, 5, 5);
+    bullet.velocityX = xv;
+    bullet.velocityY = yv;
 }
 
 /** The function to call when you want to add a game node to data */

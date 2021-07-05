@@ -17,7 +17,11 @@ class Input
             this.keys[e.key] = false;
         }, false);
         canvasElement.addEventListener("click", (e)=>{
-            console.log("click", e);
+            //console.log("click", e);
+            let xv = e.offsetX;
+            let yv = e.offsetY;
+            let length = Math.sqrt(Math.pow(xv, 2) + Math.pow(yv, 2));
+            addBullet(0, 0, (xv/length) * 4, (yv/length) * 4);
         }, false);
         canvasElement.addEventListener("mousemove", (e)=>
         {
