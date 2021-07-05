@@ -18,6 +18,10 @@ function initialize()
     input = new Input(canvas);
     clearGameWindow();
     addPlayer();
+    addEnemy(10, 20);
+    addEnemy(800, 500);
+    addEnemy(400, 300);
+    addEnemy(200, 390);
     start();
 }
 
@@ -48,6 +52,7 @@ async function start()
 function tick()
 {
     data.forEach(node => {
+        //Changing the velocity.
         if(node.type == "player")
         {
             let mousePos = input.getMousePosition();
@@ -65,16 +70,13 @@ function tick()
                 node.velocityX = 5;
             else
                 node.velocityX = 0;
-
-            
         }
+        //then collision detection.
+        checkCollisions();
+
+        //finally the object is moved.
         node.x += node.velocityX;
         node.y += node.velocityY;
-        // if(node.x > (SCREEN_WIDTH - 10) || node.x < 0)
-        //     node.x = 0;
-        // if(node.y > (SCREEN_HEIGHT - 10) || node.y < 0)
-        //     node.velocityY = 0;
-        
     });
 }
 
@@ -88,9 +90,14 @@ function render()
 
     //draw the game nodes, like players and enemies.
     data.forEach(node => {
-        if(node.type == "player")
-            ctx.fillStyle = "green";
-        ctx.fillRect(node.x, node.y, node.width, node.height);
+        if(node.visible)
+        {
+            if(node.type == "player")
+                ctx.fillStyle = "green";
+            if(node.type == "enemy")
+                ctx.fillStyle = "red";
+            ctx.fillRect(node.x, node.y, node.width, node.height);
+        }
     });
 }
 
@@ -118,13 +125,83 @@ function sleep(ms)
  */
 function addPlayer()
 {
-    data.push({
-        type: "player",
-        x: 500,
-        y: 500,
-        width: 10,
-        height: 10,
-        velocityX: 3,
-        velocityY: 5
+    let player = addNode("player", 500, 500, 20, 20);
+    player.physical = true;
+    return player;
+}
+
+/**A an enemy in a given x and y location.*/
+function addEnemy(x, y)
+{
+    let enemy = addNode("enemy", x, y, 20, 20);
+    enemy.physical = true;
+    return enemy;
+}
+
+/** The function to call when you want to add a game node to data */
+function addNode(type, x, y, width, height)
+{
+    let node = {
+        type: type,
+        x: x,
+        y: y,
+        width: width,
+        height: height,
+        velocityX: 0,
+        velocityY: 0,
+        visible: true,
+        physical: false,
+    };
+    data.push(node);
+    console.log(data);
+    return node;
+}
+
+/**check for collisions and change the velocity as neccessary. */
+function checkCollisions()
+{
+    //check for collisions with the game border.
+    data.forEach((node) => 
+    {
+        if(node.type == "player")
+        {
+            //check with left and right boundary.
+            if(node.x + node.velocityX < 0 || (node.x + node.velocityX) + node.width > SCREEN_WIDTH)
+                node.velocityX = 0;
+            //check with the top and bottom boundary.
+            if(node.y + node.velocityY < 0 || node.y + node.velocityY + node.height > SCREEN_HEIGHT)
+                node.velocityY = 0;
+        }
     });
+
+    //check for collisions with other physical objects.
+    for(let i = 0; i < data.length; i++)
+    {
+        let currentNode = data[i];
+        for(let j = 0; i < data.length; j++)
+        {
+            let otherNode = data[j];
+            if(currentNode == otherNode)
+                break;
+            let collision = true;
+            //check to see if the two nodes collide or not.
+            //if a collision is detected stop both nodes.
+            if(currentNode.x + currentNode.width + currentNode.velocityX < otherNode.x + otherNode.velocityX)
+                collision = false;
+            else if(currentNode.x + currentNode.velocityX > otherNode.x + otherNode.width + otherNode.velocityX)
+                collision = false;
+            else if(currentNode.y + currentNode.height + currentNode.velocityY < otherNode.y + otherNode.velocityY)
+                collision = false;
+            else if(currentNode.y + currentNode.velocityY > otherNode.y + otherNode.height + otherNode.velocityY)
+                collision = false;
+            
+            if(collision)
+            {
+                currentNode.velocityX = 0;
+                currentNode.velocityY = 0;
+                otherNode.velocityX = 0;
+                otherNode.velocityY = 0;
+            }
+        }
+    }
 }

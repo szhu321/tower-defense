@@ -3,3 +3,11 @@
     margin: auto;
     display: block;
 }
+
+p
+{
+    text-align: center;
+    font-family: arial;
+    font-size: 32pt;
+    font-weight: bold;
+}
