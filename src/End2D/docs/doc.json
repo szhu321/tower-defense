@@ -1,0 +1,38 @@
+{
+    "Hitbox": {
+        "fields":
+        {
+
+        },
+        "functions":
+        {
+
+        }
+    },
+    "Vec2":
+    {
+        "fields":
+        {
+            "x": {
+                "type": "number",
+                "description": "The first coord in this vector."
+            },
+            "y": {
+                "type": "number",
+                "description": "The second coord in this vector."
+            }           
+        },
+        "functions":
+        {
+            "constructor": 
+            {
+                "args":
+                {
+                    "x": "The x value for this vector.",
+                    "y": "The y value for this vector."
+                },
+                "description": "Creates a new 2D vector with the given x and y values."
+            }
+        }
+    }
+}

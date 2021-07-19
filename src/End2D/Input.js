@@ -1,21 +1,23 @@
+import Vec2 from "./Vec2";
 
 export default class Input
 {
-    mouseX = 0;
-    mouseY = 0;
-    keys = {};
-    mousePressed = false;
+    static mouseX = 0;
+    static mouseY = 0;
+    static keys = {};
+    static mousePressed = false;
 
-    constructor(canvasElement)
+    static initialize()
     {
+        let canvasElement = document.getElementById("gamewindow");
         //setting up the events.
         document.addEventListener("keydown", (e) => {
             //console.log("keydown", e.key);
-            this.keys[e.key] = true;
+            Input.keys[e.key] = true;
         }, false);
         document.addEventListener("keyup", (e) => {
             //console.log("keyup", e.key);
-            this.keys[e.key] = false;
+            Input.keys[e.key] = false;
         }, false);
         canvasElement.addEventListener("click", (e)=>{
             //console.log("click", e);
@@ -27,35 +29,35 @@ export default class Input
         canvasElement.addEventListener("mousemove", (e)=>
         {
             //when the mouse moves store the position of the mouse so that it can be used later.
-            this.mouseX = e.offsetX;
-            this.mouseY = e.offsetY;
+            Input.mouseX = e.offsetX;
+            Input.mouseY = e.offsetY;
         });
         canvasElement.addEventListener("mousedown", (e)=>
         {
-            this.mousePressed = true;
+            Input.mousePressed = true;
         });
         canvasElement.addEventListener("mouseup", (e)=>
         {
-            this.mousePressed = false;
+            Input.mousePressed = false;
         });
         
     }
 
     /**returns the mouse position inside a dictionary. x for x position, y for y position. */
-    getMousePosition()
+    static getMousePosition()
     {
-        return {x: this.mouseX, y: this.mouseY};
+        return new Vec2(Input.mouseX, Input.mouseY);
     }
     
-    isKeyPressed(key)
+    static isKeyPressed(key)
     {
-        if(this.keys[key] == true)
+        if(Input.keys[key] == true)
             return true;
         return false;
     }
 
-    isMousePressed()
+    static isMousePressed()
     {
-        return this.mousePressed;
+        return Input.mousePressed;
     }
 }

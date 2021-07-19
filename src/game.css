@@ -1,7 +1,7 @@
 #gamewindow
 {
-    margin: auto;
     display: block;
+    margin: auto;
 }
 
 p
@@ -9,5 +9,16 @@ p
     text-align: center;
     font-family: arial;
     font-size: 32pt;
+    font-weight: bold;
+}
+
+#statusbar
+{
+    display: inline-block;
+    width: 15%;
+    padding: 10px;
+    position: absolute;
+    font-family: arial;
+    font-size: 18pt;
     font-weight: bold;
 }

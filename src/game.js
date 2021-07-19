@@ -1,10 +1,13 @@
 //Author: Sheng Wei, Joshua
 
-SCREEN_WIDTH = 1280;
-SCREEN_HEIGHT = 720;
-FPS = 60;
+import { GameNodeManager, GameNode } from "./gamenode.js";
+import Input from "./input.js";
 
-let data = [];
+const SCREEN_WIDTH = 1280;
+const SCREEN_HEIGHT = 720;
+const FPS = 60;
+
+let gameNodeManager;
 let events = [];
 let currentPlayer;
 let input;
@@ -18,6 +21,7 @@ function initialize()
     canvas.width = SCREEN_WIDTH;
     canvas.height = SCREEN_HEIGHT;
     input = new Input(canvas);
+    gameNodeManager = new GameNodeManager();
     clearGameWindow();
     currentPlayer = addPlayer();
     addEnemy(800, 500);
@@ -42,7 +46,7 @@ async function start()
         let currentTime = Date.now();
         let timePassed = currentTime - previousTime;
         let sleepTime = singleFrameTime - timePassed;
-        console.log(sleepTime);
+        document.getElementById("sleeptime").innerHTML = sleepTime + "ms";
         if(sleepTime > 0)
             await sleep(sleepTime);
         previousTime = Date.now();
@@ -71,7 +75,7 @@ function tick()
         addBullet(currentPlayer.x + currentPlayer.width / 2, currentPlayer.y + currentPlayer.height / 2, (xv/length) * 4, (yv/length) * 4);
     }
     
-
+    let data = gameNodeManager.getData();
     data.forEach(node => {
         //Changing the velocity.
         if(node.type == "player")
@@ -119,6 +123,7 @@ function render()
     clearGameWindow();
 
     //draw the game nodes, like players and enemies.
+    let data = gameNodeManager.getData();
     data.forEach(node => {
         if(node.visible)
         {
@@ -190,26 +195,17 @@ function addBullet(x, y, xv, yv)
 /** The function to call when you want to add a game node to data */
 function addNode(type, x, y, width, height)
 {
-    let node = {
-        type: type,
-        x: x,
-        y: y,
-        width: width,
-        height: height,
-        velocityX: 0,
-        velocityY: 0,
-        visible: true,
-        physical: false,
-    };
-    data.push(node);
-    //console.log(data);
+    let node = new GameNode(type, x, y, width, height);
+    gameNodeManager.addData(node);
     return node;
 }
+
 
 /**check for collisions and change the velocity as neccessary. */
 function checkCollisions()
 {
     //check for collisions with the game border.
+    let data = gameNodeManager.getData();
     data.forEach((node) => 
     {
         
@@ -255,3 +251,5 @@ function checkCollisions()
         }
     }
 }
+
+initialize();
