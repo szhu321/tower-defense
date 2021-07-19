@@ -1,4 +1,4 @@
-import Vec2 from "./Vec2";
+import Vec2 from "./Vec2.js";
 
 export default class Input
 {
@@ -21,10 +21,10 @@ export default class Input
         }, false);
         canvasElement.addEventListener("click", (e)=>{
             //console.log("click", e);
-            events.push({
-                type: "mouseclick",
-                data: e,
-            });
+            // events.push({
+            //     type: "mouseclick",
+            //     data: e,
+            // });
         }, false);
         canvasElement.addEventListener("mousemove", (e)=>
         {

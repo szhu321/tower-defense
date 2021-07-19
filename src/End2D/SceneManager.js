@@ -26,7 +26,8 @@ export default class SceneManager
     {
         if(this.currentScene)
         {
-            this.currentScene.gameObjects;
+            return this.currentScene.gameObjects;
         }
+        return null;
     }
 }

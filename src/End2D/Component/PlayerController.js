@@ -1,4 +1,5 @@
-import Component from "./Component";
+import Input from "../Input.js";
+import Component from "./Component.js";
 
 export default class PlayerController extends Component
 {
@@ -9,18 +10,18 @@ export default class PlayerController extends Component
 
     update(deltaT)
     {
-        let mousePos = input.getMousePosition();
-            
+        let mousePos = Input.getMousePosition();
+        
         //checks to see if any of the control keys are pressed or not.
-        if(input.isKeyPressed("w"))
+        if(Input.isKeyPressed("w"))
             this.gameObject.velocity.y = -5;
-        else if(input.isKeyPressed("s"))
+        else if(Input.isKeyPressed("s"))
             this.gameObject.velocity.y = 5;
         else
             this.gameObject.velocity.y = 0;
-        if(input.isKeyPressed("a"))
+        if(Input.isKeyPressed("a"))
             this.gameObject.velocity.x = -5;
-        else if(input.isKeyPressed("d"))
+        else if(Input.isKeyPressed("d"))
             this.gameObject.velocity.x = 5;
         else
             this.gameObject.velocity.x = 0;

@@ -1,14 +1,20 @@
-import Input from "../input";
-import SceneManager from "./SceneManager";
+import Input from "./Input.js";
+import SceneManager from "./SceneManager.js";
 
 /** The main entry point into a game */
 export default class Game
 {
+    SCREEN_WIDTH = 1280;
+    SCREEN_HEIGHT = 720;
+    FPS = 60;
     sceneManager;
 
     constructor(config)
     {
         //Initialize the sceneManager.
+        let canvas = document.getElementById("gamewindow");
+        canvas.width = this.SCREEN_WIDTH;
+        canvas.height = this.SCREEN_HEIGHT;
         this.sceneManager = new SceneManager(this);
         Input.initialize();
     }
@@ -16,20 +22,21 @@ export default class Game
     async startGame(scene)
     {
         let previousTime = Date.now(); //gets the current time in milliseconds
+        this.sceneManager.setScene(scene);
         //let x = 1;
         //scuffed game loop.
         while(true)
         {
-            tick();
-            render();
+            this.tick();
+            this.render();
             //calculate the time needed to sleep based on the FPS.
-            let singleFrameTime = (1.0/FPS) * 1000; //calculate the maximum number of ms perframe.
+            let singleFrameTime = (1.0/this.FPS) * 1000; //calculate the maximum number of ms perframe.
             let currentTime = Date.now();
             let timePassed = currentTime - previousTime;
             let sleepTime = singleFrameTime - timePassed;
             document.getElementById("sleeptime").innerHTML = sleepTime + "ms";
             if(sleepTime > 0)
-                await sleep(sleepTime);
+                await this.sleep(sleepTime);
             previousTime = Date.now();
         }
     }
@@ -53,26 +60,31 @@ export default class Game
         let canvas = document.getElementById("gamewindow");
         let ctx = canvas.getContext("2d");
         //first draw the background.
+        //console.log("rendering");
 
         ctx.fillStyle = "#213400";
-        ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        ctx.fillRect(0, 0, this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
 
         //draw the game nodes, like players and enemies.
         let data = this.sceneManager.getData();
-        data.forEach(node => {
-            if(node.visible)
-            {
-                if(node.type == "player")
-                    ctx.fillStyle = "green";
-                else if(node.type == "enemy")
-                    ctx.fillStyle = "red";
-                else if(node.type == "bullet")
-                    ctx.fillStyle = "white";
-                else
-                    ctx.fillStyle = "white";
-                ctx.fillRect(node.position.x, node.position.y, node.width, node.height);
-            }
-        });
+        if(data)
+        {
+            data.forEach(node => {
+                if(node.visible)
+                {
+                    if(node.type == "player")
+                        ctx.fillStyle = "green";
+                    else if(node.type == "enemy")
+                        ctx.fillStyle = "red";
+                    else if(node.type == "bullet")
+                        ctx.fillStyle = "white";
+                    else
+                        ctx.fillStyle = "white";
+                    ctx.fillRect(node.position.x, node.position.y, node.width, node.height);
+                }
+            });
+        }
+        
     }
 
     getSceneManager()
@@ -80,9 +92,6 @@ export default class Game
         return this.sceneManager;
     }
 }
-
-module.exports = Game;
-
 
 
 

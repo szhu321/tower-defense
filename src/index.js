@@ -1,11 +1,11 @@
-import Game from "./End2D/game";
-import GameLevel from "./TowerDefense/Scenes/GameLevel";
+import Game from "./End2D/game.js";
+import GameLevel from "./TowerDefense/Scenes/GameLevel.js";
 
 function initialize()
 {
     console.log("Initializing.");
-    game = new Game();
-    game.getSceneManager().setScene(GameLevel);
+    let game = new Game();
+    game.startGame(GameLevel);
     
     //sets the size of the canvas.
     // let canvas = document.getElementById("gamewindow");

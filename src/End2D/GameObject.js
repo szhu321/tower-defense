@@ -1,4 +1,4 @@
-import { Vec2 } from "../utils";
+import Vec2 from "./Vec2.js";
 
 export default class GameObject
 {
@@ -11,15 +11,19 @@ export default class GameObject
     scene;
     emitter;
     components;
+    width;
+    height;
     //collidable = false;
 
-    constructor(scene, x=0, y=0)
+    constructor(scene, x=0, y=0, width = 50, height = 50)
     {
         this.scene = scene;
-        this.scene.add(this);
+        //this.scene.add(this);
         this.position = new Vec2(x, y);
         this.velocity = new Vec2(0, 0);
         this.components = new Array();
+        this.width = width;
+        this.height = height;
     }
 
     /** sets the position of the game object.*/
@@ -54,11 +58,21 @@ export default class GameObject
         {
             component.update();
         }
+
+        //preform physics.
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
+
         this.update(deltaT);
     }
 
     update(deltaT)
     {
         //overridden by child class
+    }
+
+    addComponent(component)
+    {
+        this.components.push(component);
     }
 }
