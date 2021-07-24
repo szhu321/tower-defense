@@ -80,7 +80,7 @@ export default class Game
                         ctx.fillStyle = "white";
                     else
                         ctx.fillStyle = "white";
-                    ctx.fillRect(node.position.x, node.position.y, node.width, node.height);
+                    ctx.fillRect(node.position.getX(), node.position.getY(), node.width, node.height);
                 }
             });
         }

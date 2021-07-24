@@ -11,7 +11,7 @@ export default class SceneManager
 
     setScene(Scene)
     {
-        this.currentScene = new Scene();
+        this.currentScene = new Scene(this.game);
     }
 
     preUpdate(deltaT)

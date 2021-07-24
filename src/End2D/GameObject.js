@@ -29,15 +29,15 @@ export default class GameObject
     /** sets the position of the game object.*/
     setPosition(x, y)
     {
-        this.position.x = x;
-        this.position.y = y;
+        this.position.setX(x);
+        this.position.setY(y);
     }
 
     /** sets the velocity of the game object.*/
     setVelocity(x, y)
     {
-        this.velocity.x = x;
-        this.velocity.y = y;
+        this.velocity.setX(x);
+        this.velocity.setY(y);
     }
 
     /** gets a copy of the position of the game object. */
@@ -56,12 +56,11 @@ export default class GameObject
     {
         for(let component of this.components)
         {
-            component.update();
+            component.update(deltaT);
         }
 
         //preform physics.
-        this.position.x += this.velocity.x;
-        this.position.y += this.velocity.y;
+        this.position.add(this.velocity);
 
         this.update(deltaT);
     }
