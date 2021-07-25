@@ -25,7 +25,7 @@ export default class GameLevel extends Scene
     {
         this.player = new GameObject(this);
         this.add(this.player);
-        this.player.addComponent(new WorldBound(this.player, this.game.SCREEN_WIDTH, this.game.SCREEN_HEIGHT));
+        //this.player.addComponent(new WorldBound(this.player, this.game.SCREEN_WIDTH, this.game.SCREEN_HEIGHT));
         this.player.addComponent(new PlayerController(this.player));
         
     }

@@ -14,16 +14,16 @@ export default class PlayerController extends Component
         
         //checks to see if any of the control keys are pressed or not.
         if(Input.isKeyPressed("w"))
-            this.gameObject.velocity.setY(-5);
+            this.getGameObject().setVelocityY(-5);
         else if(Input.isKeyPressed("s"))
-            this.gameObject.velocity.setY(5);
+            this.getGameObject().setVelocityY(5);
         else
-            this.gameObject.velocity.setY(0);
+            this.getGameObject().setVelocityY(0);
         if(Input.isKeyPressed("a"))
-            this.gameObject.velocity.setX(-5);
+            this.getGameObject().setVelocityX(-5);
         else if(Input.isKeyPressed("d"))
-            this.gameObject.velocity.setX(5);
+            this.getGameObject().setVelocityX(5);
         else
-            this.gameObject.velocity.setX(0);
+            this.getGameObject().setVelocityX(0);
     }
 }

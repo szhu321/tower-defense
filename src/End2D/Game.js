@@ -1,13 +1,14 @@
 import Input from "./Input.js";
 import SceneManager from "./SceneManager.js";
+import Scene from "./Scene.js";
 
 /** The main entry point into a game */
 export default class Game
 {
-    SCREEN_WIDTH = 1280;
-    SCREEN_HEIGHT = 720;
-    FPS = 60;
-    sceneManager;
+    #SCREEN_WIDTH = 1280;
+    #SCREEN_HEIGHT = 720;
+    #FPS = 60;
+    #sceneManager;
 
     /**
      * Creates a new game object. To start game run startGame() and pass in a scene object type as an argument.
@@ -18,21 +19,20 @@ export default class Game
      */
     constructor(config)
     {
-        //Initialize the sceneManager.
-        this.sceneManager = new SceneManager(this);
-        //Initialize the input.
-        Input.initialize();
-
         //apply configs.
         let {SCREEN_HEIGHT, SCREEN_WIDTH, FPS} = config;
-        this.SCREEN_HEIGHT = SCREEN_HEIGHT ? SCREEN_HEIGHT : this.SCREEN_HEIGHT;
-        this.SCREEN_WIDTH = SCREEN_WIDTH ? SCREEN_WIDTH : this.SCREEN_WIDTH;
-        this.FPS = FPS ? FPS : this.FPS;       
-
+        this.#SCREEN_HEIGHT = SCREEN_HEIGHT ? SCREEN_HEIGHT : this.#SCREEN_HEIGHT;
+        this.#SCREEN_WIDTH = SCREEN_WIDTH ? SCREEN_WIDTH : this.#SCREEN_WIDTH;
+        this.#FPS = FPS ? FPS : this.#FPS;
+        //getting the canvas.
         let canvas = document.getElementById("gamewindow");
-        canvas.width = this.SCREEN_WIDTH;
-        canvas.height = this.SCREEN_HEIGHT; 
-        
+        canvas.width = this.#SCREEN_WIDTH;
+        canvas.height = this.#SCREEN_HEIGHT; 
+
+        //Initialize the sceneManager.
+        this.#sceneManager = new SceneManager(this);
+        //Initialize the input.
+        Input.initialize(canvas);
     }
 
     /**
@@ -42,7 +42,7 @@ export default class Game
     async startGame(scene)
     {
         let previousTime = Date.now(); //gets the current time in milliseconds
-        this.sceneManager.setScene(scene);
+        this.#sceneManager.setScene(scene);
         //let x = 1;
         //scuffed game loop.
         while(true)
@@ -50,7 +50,7 @@ export default class Game
             this.tick();
             this.render();
             //calculate the time needed to sleep based on the FPS.
-            let singleFrameTime = (1.0/this.FPS) * 1000; //calculate the maximum number of ms perframe.
+            let singleFrameTime = (1.0/this.#FPS) * 1000; //calculate the maximum number of ms perframe.
             let currentTime = Date.now();
             let timePassed = currentTime - previousTime;
             let sleepTime = singleFrameTime - timePassed;
@@ -76,7 +76,7 @@ export default class Game
     tick()
     {
         //update the scene.
-        this.sceneManager.currentScene.preUpdate();
+        this.#sceneManager.getCurrentScene().preUpdate();
     }
 
     /**
@@ -90,14 +90,15 @@ export default class Game
         //console.log("rendering");
 
         ctx.fillStyle = "#213400";
-        ctx.fillRect(0, 0, this.SCREEN_WIDTH, this.SCREEN_HEIGHT);
+        ctx.fillRect(0, 0, this.#SCREEN_WIDTH, this.#SCREEN_HEIGHT);
 
         //draw the game nodes, like players and enemies.
-        let data = this.sceneManager.getData();
+        let data = this.#sceneManager.getData();
+        //console.log(data.length);
         if(data)
         {
             data.forEach(node => {
-                if(node.visible)
+                if(node.isVisible())
                 {
                     if(node.type == "player")
                         ctx.fillStyle = "green";
@@ -107,7 +108,7 @@ export default class Game
                         ctx.fillStyle = "white";
                     else
                         ctx.fillStyle = "white";
-                    ctx.fillRect(node.position.getX(), node.position.getY(), node.width, node.height);
+                    ctx.fillRect(node.getX(), node.getY(), node.getWidth(), node.getHeight());
                 }
             });
         }
@@ -120,7 +121,7 @@ export default class Game
      */
     getSceneManager()
     {
-        return this.sceneManager;
+        return this.#sceneManager;
     }
 }
 

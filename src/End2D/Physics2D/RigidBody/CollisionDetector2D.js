@@ -319,5 +319,72 @@ export default class CollisionDetector2D
     }
 
 
+    /**
+     * Check circle and AABB collision.
+     * @param {Circle} circle - the circle.
+     * @param {AABB} aabb - the aabb.
+     * @returns {boolean} True if a collision was detected, false otherwise.
+     */
+    static circleAndAABB(circle, aabb)
+    {
+        let min = aabb.getMin().clone();
+        let max = aabb.getMax().clone();
+
+        let closestPointToCircle = circle.getCenter().clone();
+        if(closestPointToCircle.getX() < min.getX())
+        {
+            closestPointToCircle.setX(min.getX());
+        }else if(closestPointToCircle.getX() > max.getX())
+        {
+            closestPointToCircle.setX(max.getX());
+        }
+
+        if(closestPointToCircle.getY() < min.getY())
+        {
+            closestPointToCircle.setY(min.getY());
+        }else if(closestPointToCircle.getY() > max.getY())
+        {
+            closestPointToCircle.setY(max.getY());
+        }
+
+        let circleToBox = circle.getCenter().clone().sub(closestPointToCircle);
+        return circleToBox.magnitudeSquared() <= circle.getRadius() * circle.getRadius();
+    }
+
+    /**
+     * Checks collision between circle and rectangle.
+     * @param {Circle} circle - the circle.
+     * @param {Rectangle} rect - the rectangle.
+     * @returns {boolean} True if they collide, false otherwise.
+     */
+    static circleAndRectangle(circle, rect)
+    {
+        let min = new Vec2();
+        let max = rect.getHalfSize().clone().mult(2);
+
+        let r =  circle.getCenter().clone().sub(rect.getRigidBody().getPosition());
+        EMath.rotate(r, -rect.getRigidBody().getRotation(), new Vec2());
+        let localCirclePos = r.clone().add(rect.getHalfSize());
+
+        let closestPointToCircle = localCirclePos.clone();
+        if(closestPointToCircle.getX() < min.getX())
+        {
+            closestPointToCircle.setX(min.getX());
+        }else if(closestPointToCircle.getX() > max.getX())
+        {
+            closestPointToCircle.setX(max.getX());
+        }
+
+        if(closestPointToCircle.getY() < min.getY())
+        {
+            closestPointToCircle.setY(min.getY());
+        }else if(closestPointToCircle.getY() > max.getY())
+        {
+            closestPointToCircle.setY(max.getY());
+        }
+
+        let circleToBox = localCirclePos.clone().sub(closestPointToCircle);
+        return circleToBox.magnitudeSquared() <= circle.getRadius() * circle.getRadius();
+    }
 
 }

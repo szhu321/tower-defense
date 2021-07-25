@@ -41,7 +41,7 @@ export default class Rectangle
 
     /**
      * Gets the half size of this rectangle.
-     * @returns the half size.
+     * @returns {Vec2} the half size.
      */
     getHalfSize()
     {

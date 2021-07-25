@@ -1,24 +1,19 @@
 import Game from "./End2D/game.js";
 import GameLevel from "./TowerDefense/Scenes/GameLevel.js";
 
+/**Creates a Game and starts with with a default scene. */
 function initialize()
 {
-    console.log("Initializing.");
-    let game = new Game();
+    console.log("Initializing. Game");
+
+    let config = {
+        SCREEN_WIDTH: 1280,
+        SCREEN_HEIGHT: 720,
+        FPS: 60
+    }
+
+    let game = new Game(config);
     game.startGame(GameLevel);
-    
-    //sets the size of the canvas.
-    // let canvas = document.getElementById("gamewindow");
-    // canvas.width = SCREEN_WIDTH;
-    // canvas.height = SCREEN_HEIGHT;
-    // input = new Input(canvas);
-    // gameNodeManager = new GameNodeManager();
-    // clearGameWindow();
-    // currentPlayer = addPlayer();
-    // addEnemy(800, 500);
-    // addEnemy(400, 300);
-    // addEnemy(200, 390);
-    // start();
 
 }
 
