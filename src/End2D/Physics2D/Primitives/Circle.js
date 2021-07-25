@@ -1,10 +1,11 @@
 import RigidBody2D from "../RigidBody/RigidBody2D.js";
-import Vec2 from "../../Vec2.js";
+import Vec2 from "../../Utilities/Vec2.js";
 
 export default class Circle
 {
     #radius = 1;
     #rigidBody;
+    #type = "circle";
 
     /**
      * 
@@ -33,5 +34,14 @@ export default class Circle
     getCenter()
     {
         return this.#rigidBody.position();
+    }
+
+    /**
+     * Gets the type of this shape. Its a "circle".
+     * @returns {string} "circle".
+     */
+    getType()
+    {
+        return this.#type;
     }
 }

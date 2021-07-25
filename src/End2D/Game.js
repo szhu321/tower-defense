@@ -9,16 +9,36 @@ export default class Game
     FPS = 60;
     sceneManager;
 
+    /**
+     * Creates a new game object. To start game run startGame() and pass in a scene object type as an argument.
+     * @param {object} config - an object containing configuation data for this game.
+     * @param {number} [config.SCREEN_WIDTH = 1280] - the screen width. 
+     * @param {number} [config.SCREEN_HEIGHT = 720] - the screen height.
+     * @param {number} [config.FPS = 60] - the FPS of the game.
+     */
     constructor(config)
     {
         //Initialize the sceneManager.
+        this.sceneManager = new SceneManager(this);
+        //Initialize the input.
+        Input.initialize();
+
+        //apply configs.
+        let {SCREEN_HEIGHT, SCREEN_WIDTH, FPS} = config;
+        this.SCREEN_HEIGHT = SCREEN_HEIGHT ? SCREEN_HEIGHT : this.SCREEN_HEIGHT;
+        this.SCREEN_WIDTH = SCREEN_WIDTH ? SCREEN_WIDTH : this.SCREEN_WIDTH;
+        this.FPS = FPS ? FPS : this.FPS;       
+
         let canvas = document.getElementById("gamewindow");
         canvas.width = this.SCREEN_WIDTH;
-        canvas.height = this.SCREEN_HEIGHT;
-        this.sceneManager = new SceneManager(this);
-        Input.initialize();
+        canvas.height = this.SCREEN_HEIGHT; 
+        
     }
 
+    /**
+     * Start a new game with a given scene.
+     * @param {Scene} scene - the scene. Don't pass in an instance, pass the class name directly.
+     */
     async startGame(scene)
     {
         let previousTime = Date.now(); //gets the current time in milliseconds
@@ -43,18 +63,25 @@ export default class Game
 
     /**
      * @param ms - The number of milliseconds to sleep the program.
+     * @returns {Promise} the promise object to await for.
      */
     sleep(ms)
     {
-    return new Promise(resolve => setTimeout(resolve, ms));
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    /**
+     * The update of the game loop.
+     */
     tick()
     {
         //update the scene.
         this.sceneManager.currentScene.preUpdate();
     }
 
+    /**
+     * The rendering of the game loop.
+     */
     render()
     {
         let canvas = document.getElementById("gamewindow");
@@ -87,6 +114,10 @@ export default class Game
         
     }
 
+    /**
+     * Gets the current sceneManager.
+     * @returns {SceneManager} the scene manager.
+     */
     getSceneManager()
     {
         return this.sceneManager;

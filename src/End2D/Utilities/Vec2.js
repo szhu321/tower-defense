@@ -157,4 +157,29 @@ export default class Vec2
         this.#y = vec2.getY();
     }
 
+    /**
+     * Gets the x or y value of the vector depending on the value passed in.
+     * @param {number} num - 0 to get x. 1 to get y.
+     * @returns The x or y value depending on num.
+     */
+    get(num)
+    {
+        if(num === 0)
+            return this.#x;
+        return this.#y;
+    }
+
+    /**
+     * Sets the value of x or y to a certain value.
+     * @param {number} num - 0 to set x. 1 to set y.
+     * @param {number} value - the value to set x or y to.
+      */
+    setComponent(num, value)
+    {
+        if(num === 0)
+            this.#x = value;
+        else
+            this.#y = value;
+    }
+
 }

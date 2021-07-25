@@ -2,11 +2,18 @@ import EMath from "../../Utilities/EMath.js";
 import RaycastResult from "../Primitives/RaycastResult.js";
 import Circle from "../Primitives/Circle.js";
 import Ray2D from "../Primitives/Ray2D.js";
+import Vec2 from "../../Utilities/Vec2.js";
+import AABB from "../Primitives/AABB.js"
+import Rectangle from "../Primitives/Rectangle.js"
+import Line from "../Primitives/Line.js";
 
 export default class CollisionDetector2D
 {
     
-    /**Test to see if a point is on a line or not */
+    /**Test to see if a point is on a line or not
+     * @param {Vec2} point - the point.
+     * @param {Vec2} line - the line.
+     */
     static pointOnLine(point, line)
     {
         let dy = line.getEnd().getY() - line.getStart().getY();
@@ -24,20 +31,29 @@ export default class CollisionDetector2D
         return point.getY() === m * point.getX() + b;
     }
 
-    /**Test to see if a point is on or in a circle. */
+    /**Test to see if a point is on or in a circle. 
+     * @param {Vec2} point - the point.
+     * @param {Circle} circle - the circle.
+    */ 
     static pointInCircle(point, circle)
     {
         return point.clone().sub(circle.getCenter()).magnitudeSquared() <= circle.getRadius() * circle.getRadius();
     }
 
-    /**Testing to see if a point is in a AABB */
+    /**Testing to see if a point is in a AABB
+     * @param {Vec2} point - the point.
+     * @param {AABB} aabb - the aabb.
+     */
     static pointInAABB(point, aabb)
     {
         return point.getX() >= aabb.getMin().getX() && point.getX() <= aabb.getMax().getX()
             && point.getY() >= aabb.getMin().getY() && point.getY() <= aabb.getMax().getY();
     }
 
-    /**Testing to see if a point is in a rectangle */
+    /**Testing to see if a point is in a rectangle.
+     * @param {Vec2} point - the point.
+     * @param {Rectangle} rect - the rectangle.
+     */
     static pointInRectangle(point, rect)
     {
         //rotate point by the rotation of rect.
@@ -51,7 +67,10 @@ export default class CollisionDetector2D
             && rotPoint.getY() >= min.getY() && rotPoint.getY() <= max.getY();
     }
 
-    /**Testing line and circle intersection */
+    /**Testing line and circle intersection.
+     * @param {Line} line - the line.
+     * @param {Circle} circle - the circle.
+     */
     static lineInCircle(line, circle)
     {
         if(CollisionDetector2D.pointInCircle(line.getStart(), circle) || CollisionDetector2D.pointInCircle(line.getEnd(), circle))
@@ -72,7 +91,10 @@ export default class CollisionDetector2D
         return CollisionDetector2D.pointInCircle(closestPoint, circle);
     }
 
-    /**Testing line intersection AABB */
+    /**Testing line intersection AABB.
+     * @param {Line} line - the line.
+     * @param {AABB} aabb - the aabb.
+     */
     static lineInAABB(line, aabb)
     {
         if(CollisionDetector2D.pointInAABB(line.getStart(), aabb) || CollisionDetector2D.pointInAABB(line.getEnd(), aabb))
@@ -99,7 +121,10 @@ export default class CollisionDetector2D
         return t > 0 && t * t < line.lengthSquared();
     }
 
-    /**Testing line intersection Rectangle */
+    /**Testing line intersection Rectangle.
+     * @param {Line} line - the line.
+     * @param {Rectangle} rect - the rectangle.
+     */
     static lineInRectangle(line, rect)
     {
         let theta = box.getRigidBody().getRotation();
@@ -116,12 +141,31 @@ export default class CollisionDetector2D
     }
 
     /**
-     * 
+     * Raycast to a given Circle, AABB, or Rectangle.
+     * @param {Circle|Rectangle|AABB} shape - the shape. Can be circle, AABB, or Rectangle.
+     * @param {Ray2D} ray - the 2D ray
+     * @param {RaycastResult} result - the raycast result
+     * @returns {boolean} True if the ray hits the shape false otherwise.
+     */
+    static raycast(shape, ray, result = null)
+    {
+        switch(shape.getType())
+        {
+            case "circle": return CollisionDetector2D.#raycastCircle(shape, ray, result);
+            case "rectangle": return CollisionDetector2D.#raycastRectangle(shape,ray,result);
+            case "aabb": return CollisionDetector2D.#raycastAABB(shape,ray,result);
+        }
+        return false;
+    }
+
+    /**
+     * Raycast to an circle.
      * @param {Circle} circle - the circle
      * @param {Ray2D} ray - the 2D ray
      * @param {RaycastResult} result - the raycast result
+     * @returns {boolean} True if the ray hits the circle false otherwise.
      */
-    static raycast(circle, ray, result = null)
+    static #raycastCircle(circle, ray, result = null)
     {
         RaycastResult.reset(result);
         
@@ -148,7 +192,7 @@ export default class CollisionDetector2D
 
         if(result != null)
         {
-            let point = ray.getOrigin().clone().add(ray.getDirection().mult(t));
+            let point = ray.getOrigin().clone().add(ray.getDirection().clone().mult(t));
             let normal = point.clone().sub(circle.getCenter());
             normal.normalize();
             result.init(point, normal, t, true);
@@ -156,5 +200,124 @@ export default class CollisionDetector2D
 
         return true;
     }
+
+    /**
+     * Raycast to an aabb.
+     * @param {AABB} AABB - the aabb.
+     * @param {Ray2D} ray - the 2D ray.
+     * @param {RaycastResult} result - the raycast result.
+     * @returns {boolean} True if the ray hits the AABB false otherwise.
+     */
+    static #raycastAABB(AABB, ray, result = null)
+    {   
+        RaycastResult.reset(result);
+
+        let unitVector = ray.getDirection();
+        unitVector.normalize();
+
+        //makes calculations easier. unitvector is now 1 / unitvector.
+        unitVector.getX() = (unitVector.getX() !== 0) ? 1 / unitVector.getX() : 0;
+        unitVector.getY() = (unitVector.getY() !== 0) ? 1 / unitVector.getY() : 0;
+
+        let min = aabb.getMin().clone();
+        min.sub(ray.getOrigin()).mult(unitVector);
+        let max = aabb.getMax().clone();
+        max.sub(ray.getOrigin()).mult(unitVector);
+
+        let tmin = Math.max(Math.min(min.getX(), max.getX()), Math.min(min.getY(), max.getY()));
+        let tmax = Math.min(Math.max(min.getX(), max.getX()), Math.max(min.getY(), max.getY()));
+        if(tmax < 0 || tmin > tmax)
+            return false;
+        
+        let t = (tmin < 0) ? tmax : tmin;
+        let hit = t > 0; //&& t * t < ray.getMaximin();
+        if(!hit)
+            return false;
+
+        if(result != null)
+        {
+            let point = ray.getOrigin().clone().add(ray.getDirection().clone().mult(t));
+            let normal = ray.getOrigin().clone().sub(point);
+            normal.normalize();
+            result.init(point, normal, t, true);
+        }
+        return true;
+    }
+
+    /**
+     * Raycast to an rectangle.
+     * @param {Rectangle} rectangle - the rectangle.
+     * @param {Ray2D} ray - the 2D ray.
+     * @param {RaycastResult} result - the raycast result.
+     * @returns {boolean} True if the ray hits the rectangle false otherwise.
+     */
+    static #raycastRectangle(rectangle, ray, result = null)
+    {   
+        RaycastResult.reset(result);
+
+        let size = rectangle.getHalfSize();
+        let xAxis = new Vec2(1, 0);
+        let yAxis = new Vec2(0, 1);
+        EMath.rotate(xAxis, -rectangle.getRigidBody().getRotation(), new Vec2(0,0));
+        EMath.rotate(yAxis, -rectangle.getRigidBody().getRotation(), new Vec2(0,0));
+
+        let p = rectangle.getRigidBody().getPosition().clone().sub(ray.getOrigin());
+        //project the direction of the ray onto each axis of the box.
+        let f = new Vec2(xAxis.dot(ray.getDirection()), yAxis.dot(ray.getDirection()));
+        //project p into every axis of the box.
+        let e = new Vec2(xAxis.dot(p), yAxis.dot(p));
+
+        let tArr = [0, 0, 0, 0];
+        for(let i = 0; i < 2; i++)
+        {
+            if(EMath.compare(f.get(i), 0))
+            {
+                //If the ray is parallel to the current axis, and the origin of the ray is not inside, we have no hit.
+                if(-e.get(i) - size.get(i) > 0 || -e.get(i) + size.get(i) < 0)
+                {
+                    return false;
+                }
+                f.setComponent(i, 0.00001); //set to a small value to avoid divide by 0 error.
+            }
+            tArr[i * 2 + 0] = (e.get(i) + size.get(i)) / f.get(i); //tmax for this axis.
+            tArr[i * 2 + 1] = (e.get(i) - size.get(i)) / f.get(i); //tmin for this axis.
+        }
+
+        let tmin = Math.max(Math.min(tArr[0], tArr[1]), Math.min(tArr[2], tArr[3]));
+        let tmax = Math.min(Math.max(tArr[0], tArr[1]), Math.max(tArr[2], tArr[3]));
+
+        if(tmax < 0 || tmin > tmax)
+            return false;
+        
+        let t = (tmin < 0) ? tmax : tmin;
+        let hit = t > 0; //&& t * t < ray.getMaximin();
+        if(!hit)
+            return false;
+
+        if(result != null)
+        {
+            let point = ray.getOrigin().clone().add(ray.getDirection().clone().mult(t));
+            let normal = ray.getOrigin().clone().sub(point);
+            normal.normalize();
+            result.init(point, normal, t, true);
+        }
+        return true;
+    }
+
+
+    /**
+     * Checks to see if a circle collides with another circle.
+     * @param {Circle} c1 - the first circle.
+     * @param {Circle} c2 - the second circle.
+     * @returns {boolean} True if they collide, false otherwise.
+     */
+    static circleAndCircle(c1, c2)
+    {
+        let vecBetweenCenters = c1.getCenter().clone().sub(c2.getCenter());
+        let rSum = c1.getRadius() + c2.getRadius();
+        return vecBetweenCenters.magnitudeSquared() <= rSum * rSum;
+    }
+
+
 
 }

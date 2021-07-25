@@ -1,4 +1,4 @@
-import Vec2 from "../../Vec2.js";
+import Vec2 from "../../Utilities/Vec2.js";
 
 export default class AABB
 {
@@ -6,6 +6,7 @@ export default class AABB
     #size;
     #halfSize;
     #rigidBody;
+    #type = "aabb";
 
     /**Takes two vector as params, min:Vec2 - the top left, max:Vec2 - the bottom right*/
     constructor(min, max)
@@ -25,5 +26,14 @@ export default class AABB
     getMax()
     {
         return this.#rigidBody.getPosition().clone().add(this.#halfSize);
+    }
+
+    /**
+     * Gets the type of this shape. Its a "aabb".
+     * @returns {string} "aabb".
+     */
+    getType()
+    {
+    return this.#type;
     }
 }

@@ -1,4 +1,4 @@
-import Vec2 from "./Vec2.js";
+import Vec2 from "./Utilities/Vec2.js";
 
 export default class Input
 {

@@ -1,5 +1,5 @@
 import GameObject from "../../GameObject.js";
-import Vec2 from "../../Vec2.js";
+import Vec2 from "../../Utilities/Vec2.js";
 
 export default class RigidBody2D extends GameObject
 {
@@ -9,7 +9,7 @@ export default class RigidBody2D extends GameObject
     constructor()
     {
         this.#position = new Vec2();
-        this.#rotation = new Vec2();
+        this.#rotation = 0;
     }
 
     getPosition(){return this.#position;}
