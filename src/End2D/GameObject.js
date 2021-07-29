@@ -1,3 +1,4 @@
+import Component from "./Component/Component.js";
 import Vec2 from "./Utilities/Vec2.js";
 
 export default class GameObject
@@ -12,6 +13,9 @@ export default class GameObject
     #width;
     #height;
     //#emitter;
+    /**
+     * @type {Component[]} An array of this gameObject's components.
+     */
     #components;
     
     //collidable = false;
@@ -255,5 +259,20 @@ export default class GameObject
     addComponent(component)
     {
         this.#components.push(component);
+    }
+
+    /**
+     * Gets a component of this game object.
+     * @param {string} name - The name of the component.
+     * @returns {Component} The component requested. Null if not found.
+     */
+    getComponent(name)
+    {
+        for(let c of this.#components)
+        {
+            if(c.getName() === name)
+                return c;
+        }
+        return null;
     }
 }

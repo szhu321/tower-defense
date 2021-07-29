@@ -387,4 +387,38 @@ export default class CollisionDetector2D
         return circleToBox.magnitudeSquared() <= circle.getRadius() * circle.getRadius();
     }
 
+    static AABBAndCircle(aabb, circle)
+    {
+        return CollisionDetector2D.circleAndAABB(circle, aabb);
+    }
+
+    /**
+     * Checks the collision between two AABB's.
+     * @param {AABB} aabb1 - The first AABB.
+     * @param {AABB} aabb2 - The second AABB.
+     * @returns {boolean} True if collision detected, false otherwise.
+     */
+    static AABBAndAABB(aabb1, aabb2)
+    {
+        let min1 = aabb1.getMin();
+        let max1 = aabb1.getMax();
+        let min2 = aabb2.getMin();
+        let max2 = aabb2.getMax();
+        return !(min1.getX() > max2.getX() || max1.getX() < min2.getX() || min1.getY() > max2.getY() || max1.getY() < min2.getY());
+    }
+
+    /**
+     * Gets the min and max of the aabb projected onto an axis.
+     * @param {AABB} aabb - The AABB.
+     * @param {Vec2} axis - The axis.
+     */
+    static #getInterval(aabb, axis)
+    {
+        let result = new Vec2();
+
+        let min = aabb.getMin();
+        let max = aabb.getMax();
+    }
+
+
 }

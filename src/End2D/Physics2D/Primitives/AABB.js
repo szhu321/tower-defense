@@ -6,6 +6,10 @@ export default class AABB
     //#center;
     #size;
     #halfSize;
+
+    /**
+     * @type {RigidBody2D} The rigidBody.
+     */
     #rigidBody;
     #type = "aabb";
 
@@ -44,10 +48,10 @@ export default class AABB
      * Gets the half size of this rectangle.
      * @returns {Vec2} the half size.
      */
-     getHalfSize()
-     {
-         return this.#halfSize;
-     }
+    getHalfSize()
+    {
+        return this.#halfSize;
+    }
 
     /**
      * Gets the type of this shape. Its a "aabb".

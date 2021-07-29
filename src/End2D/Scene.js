@@ -1,11 +1,13 @@
 import GameObject from "./GameObject.js";
 import Game from "./game.js";
+import PhysicsManager from "./Physics2D/Physics/PhysicsManager.js";
 
 /** Houses the gameobjects and other important components. */
 export default class Scene
 { 
     #game;
     #gameObjects;
+    #physics;
 
     /**
      * Creates a new scene.
@@ -16,6 +18,7 @@ export default class Scene
     {
         this.#game = game;
         this.#gameObjects = gameObjects;
+        this.#physics = new PhysicsManager(this);
         this.create();
     }
 
@@ -27,8 +30,9 @@ export default class Scene
         //update all the gameobjects.
         for(let obj of this.#gameObjects)
         {
-            obj.preUpdate();
+            obj.preUpdate(deltaT);
         }
+        this.#physics.update(deltaT);
         this.update(deltaT);
     }
 
