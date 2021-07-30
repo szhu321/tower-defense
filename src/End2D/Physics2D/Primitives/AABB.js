@@ -16,12 +16,13 @@ export default class AABB
     /**Takes two vector as params, min:Vec2 - the top left, max:Vec2 - the bottom right
      * @param {Vec2} min - the minimum coord.
      * @param {Vec2} max - the maximun coord.
+     * @param {RigidBody2D} rigidBody - The rigidBody.
     */
-    constructor(min, max)
+    constructor(min, max, rigidBody)
     {
         this.#size = max.clone().sub(min);
         this.#halfSize = this.#size.clone().mult(0.5);
-        this.#rigidBody = null;
+        this.#rigidBody = rigidBody;
         //this.#center = min.clone().add(this.#size.clone().mult(0.5));
     }
 

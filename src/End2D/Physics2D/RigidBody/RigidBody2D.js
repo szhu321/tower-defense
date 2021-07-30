@@ -26,6 +26,8 @@ export default class RigidBody2D extends Component
         this.#rotation = 0;
         this.#collidable = true;
         this.#createDefaultCollider();
+
+        gameObject.getScene().getPhysics().addGameObject(gameObject);
     }
 
     /**
@@ -35,7 +37,7 @@ export default class RigidBody2D extends Component
     {
         let min = new Vec2();
         let max = new Vec2(this.getGameObject().getWidth(), this.getGameObject().getHeight());
-        this.#collider = new Collider2D(min, max);
+        this.#collider = new Collider2D(min, max, this);
     }
 
     /**
@@ -103,8 +105,8 @@ export default class RigidBody2D extends Component
     {
         //Change the position of this rigidBody to match that of the gameobject.
         let objPos = this.getGameObject().getPosition();
-        this.#position.setX(objPos.getX());
-        this.#position.setY(objPos.getY());
+        this.#position.setX(objPos.getX() + this.getGameObject().getWidth() / 2);
+        this.#position.setY(objPos.getY() + this.getGameObject().getHeight() / 2);
         
     }
 }

@@ -51,7 +51,22 @@ export default class DebugDraw
 
 
 
-    //draw a line segment
+    /**
+     * 
+     * @param {CanvasRenderingContext2D} ctx - The CanvasRenderingContext2D.
+     * @param {*} line - The line.
+     * @param {*} lineColor - The line color. Following CSS color format.
+     */
+    static drawLine(ctx, line, lineColor)
+    {
+        ctx.save();
+        ctx.strokeStyle = lineColor;
+        ctx.beginPath();
+        ctx.moveTo(line.getStart().getX(),line.getStart().getY());
+        ctx.lineTo(line.getEnd().getX(),line.getEnd().getY());
+        ctx.stroke();
+        ctx.restore();
+    }
     
 }
 

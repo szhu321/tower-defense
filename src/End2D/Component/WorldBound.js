@@ -4,17 +4,18 @@ export default class WorldBound extends Component
 {
     constructor(gameObject, screenWidth, screenHeight)
     {
-        super(gameObject, "WorldBound");
+        super(gameObject, "worldBound");
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
     }
 
     update(deltaT)
     {
-        if(this.gameObject.x + this.gameObject.velocity.x < 0 || (this.gameObject.x + this.gameObject.velocity.x) + this.gameObject.width > this.screenWidth)
-                this.gameObject.velocity.x = 0;
+        let gameObject = this.getGameObject();
+        if(gameObject.getX() + gameObject.getVelocity().getX() < 0 || (gameObject.getX() + gameObject.getVelocity().getX()) + gameObject.getWidth() > this.screenWidth)
+                gameObject.setVelocityX(0);
         //check with the top and bottom boundary.
-        if(this.gameObject.y + this.gameObject.velocity.y < 0 || this.gameObject.y + this.gameObject.velocity.y + this.gameObject.height > this.screenHeight)
-                this.gameObject.velocity.y = 0;
+        if(gameObject.getY() + gameObject.getVelocity().getY() < 0 || gameObject.getY() + gameObject.getVelocity().getY() + gameObject.getHeight() > this.screenHeight)
+                gameObject.setVelocityY(0);
     }
 }

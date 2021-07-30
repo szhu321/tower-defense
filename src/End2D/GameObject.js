@@ -1,5 +1,6 @@
 import Component from "./Component/Component.js";
 import Vec2 from "./Utilities/Vec2.js";
+import Scene from "./scene.js";
 
 export default class GameObject
 {
@@ -84,6 +85,11 @@ export default class GameObject
     setX(x)
     {
         this.#position.setX(x);
+        let rb = this.getComponent("rigidBody");
+        if(rb)
+        {
+            rb.getPosition().setX(x + this.#width/2);
+        }
     }
 
     /**
@@ -93,6 +99,11 @@ export default class GameObject
     setY(y)
     {
         this.#position.setY(y);
+        let rb = this.getComponent("rigidBody");
+        if(rb)
+        {
+            rb.getPosition().setY(y + this.#height/2);
+        }
     }
 
     /** Gets a copy of the position of the gameObject.
@@ -246,7 +257,6 @@ export default class GameObject
         }
 
         //preform physics.
-        this.#position.add(this.#velocity);
 
         this.update(deltaT);
     }

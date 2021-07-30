@@ -1,6 +1,11 @@
 import Input from "./Input.js";
 import SceneManager from "./SceneManager.js";
 import Scene from "./Scene.js";
+import CollisionResult from "./Physics2D/Physics/CollisionResult.js";
+import CollisionDetector2D from "./Physics2D/RigidBody/CollisionDetector2D.js";
+import DebugDraw from "./Rendering/DebugDraw.js";
+import Vec2 from "./Utilities/Vec2.js";
+import Line from "./Physics2D/Primitives/Line.js";
 
 /** The main entry point into a game */
 export default class Game
@@ -47,7 +52,7 @@ export default class Game
         //scuffed game loop.
         while(true)
         {
-            this.tick();
+            this.tick(0.016);
             this.render();
             //calculate the time needed to sleep based on the FPS.
             let singleFrameTime = (1.0/this.#FPS) * 1000; //calculate the maximum number of ms perframe.
@@ -73,10 +78,10 @@ export default class Game
     /**
      * The update of the game loop.
      */
-    tick()
+    tick(deltaT)
     {
         //update the scene.
-        this.#sceneManager.getCurrentScene().preUpdate();
+        this.#sceneManager.getCurrentScene().preUpdate(deltaT);
     }
 
     /**
@@ -89,7 +94,7 @@ export default class Game
         //first draw the background.
         //console.log("rendering");
 
-        ctx.fillStyle = "#213400";
+        ctx.fillStyle = "#d68f38";
         ctx.fillRect(0, 0, this.#SCREEN_WIDTH, this.#SCREEN_HEIGHT);
 
         //draw the game nodes, like players and enemies.
@@ -112,6 +117,46 @@ export default class Game
                 }
             });
         }
+
+
+        let go = this.#sceneManager.getCurrentScene().getPhysics().getGameObjects();
+
+        let results = [];
+        for(let i = 0; i < go.length - 1; i++)
+        {
+            for(let j = i + 1; j < go.length; j++)
+            {
+                let c1 = go[i].getComponent("rigidBody").getCollider();
+                let c2 = go[j].getComponent("rigidBody").getCollider();
+                results.push(new CollisionResult(c1, c2));
+            }
+        }
+        //check for collisions.
+        for(let i = 0; i < results.length; i++)
+        {
+            let hit = CollisionDetector2D.AABBAndAABB(results[i].collider1.getHitBox(), results[i].collider2.getHitBox());
+            results[i].collide = hit;
+        }
+
+        for(let i = 0; i < results.length; i++)
+        {
+            let lineColor = "green";
+            if(results[i].collide)
+            {
+                lineColor = "red";
+            }
+            //console.log("ea");
+            DebugDraw.drawAABB(ctx, results[i].collider1.getHitBox(), lineColor);
+        }
+
+        for(let i = 0; i < go.length; i++)
+        {
+            let pos = go[i].getPosition().clone().add(new Vec2(go[i].getWidth()/2, go[i].getHeight()/2));
+            let v = go[i].getVelocity().clone().mult(6);
+            let line = new Line(pos, pos.clone().add(v));
+            DebugDraw.drawLine(ctx, line, "blue");
+            //DebugDraw.
+        }
         
     }
 
@@ -122,6 +167,24 @@ export default class Game
     getSceneManager()
     {
         return this.#sceneManager;
+    }
+
+    /**
+     * Gets the screen width.
+     * @returns {number} The screen width.
+     */
+    getScreenWidth()
+    {
+        return this.#SCREEN_WIDTH;
+    }
+
+    /**
+     * Gets the screen height.
+     * @returns {number} The screen height.
+     */
+    getScreenHeight()
+    {
+        return this.#SCREEN_HEIGHT;
     }
 }
 

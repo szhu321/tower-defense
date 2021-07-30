@@ -27,7 +27,7 @@ export default class SceneManager
      */
     setScene(sceneClass)
     {
-        this.#currentScene = new sceneClass(this.game);
+        this.#currentScene = new sceneClass(this.getGame());
     }
 
     /**

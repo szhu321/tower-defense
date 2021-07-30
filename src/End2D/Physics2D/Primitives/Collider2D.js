@@ -1,5 +1,6 @@
 import GameObject from "../../GameObject.js"
 import Vec2 from "../../Utilities/Vec2.js";
+import RigidBody2D from "../RigidBody/RigidBody2D.js";
 import AABB from "./AABB.js";
 
 export default class Collider2D
@@ -12,11 +13,12 @@ export default class Collider2D
      * Creates a new collider with an aabb.
      * @param {Vec2} min - The min coord.
      * @param {Vec2} max - The max coord.
+     * @param {RigidBody2D} rigidBody - The rigidBody.
      */
-    constructor(min, max)
+    constructor(min, max, rigidBody)
     {
         this.#offset = new Vec2();
-        this.#hitbox = new AABB(min, max);
+        this.#hitbox = new AABB(min, max, rigidBody);
         this.#hitboxType = "aabb";
     }
 

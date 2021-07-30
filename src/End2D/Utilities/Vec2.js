@@ -89,7 +89,7 @@ export default class Vec2
      */
     magnitude()
     {
-        return Math.sqrt(this.#x * this.#x + this.#y + this.#y);
+        return Math.sqrt(this.#x * this.#x + this.#y * this.#y);
     }
 
     /**
@@ -98,7 +98,7 @@ export default class Vec2
      */
     magnitudeSquared()
     {
-        return this.#x * this.#x + this.#y + this.#y;
+        return this.#x * this.#x + this.#y * this.#y;
     }
 
     /** normalizes this vector 

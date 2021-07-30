@@ -32,8 +32,8 @@ export default class Scene
         {
             obj.preUpdate(deltaT);
         }
-        this.#physics.update(deltaT);
         this.update(deltaT);
+        this.#physics.update(deltaT);
     }
 
     /** runs immediately after the constructor. Gets called automatically by the constructor.*/
@@ -69,6 +69,15 @@ export default class Scene
         {
             this.#gameObjects.splice(idx, 1);
         }
+    }
+
+    /**
+     * Gets the physics manager.
+     * @returns {PhysicsManager} The physics manager
+     */
+    getPhysics()
+    {
+        return this.#physics;
     }
 
     /**
