@@ -5,6 +5,7 @@ import RigidBody2D from "../../End2D/Physics2D/RigidBody/RigidBody2D.js";
 import Scene from "../../End2D/Scene.js";
 import Enemy from "../Entities/Enemy.js";
 
+
 export default class GameLevel extends Scene
 {
     /**
@@ -14,9 +15,18 @@ export default class GameLevel extends Scene
 
     create()
     {
+        
+        let WIDTH = this.getGame().getScreenWidth()
+        let HEIGHT = this.getGame().getScreenHeight()
+
         this.addPlayer();
-        this.addEnemy(500, 300);
-        this.addEnemy(700, 500);
+        for(let i = 0; i <= 4; i++)
+        {
+            let x1 = Math.random();
+            let x2 = Math.random();
+            this.addEnemy((WIDTH * 0.8) + (x1 * WIDTH * (0.2)), x2 * HEIGHT);
+        }
+        
         // let circ = new Circle();
         // console.log(circ.getRadius());
     }
