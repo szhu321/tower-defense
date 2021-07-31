@@ -1,6 +1,9 @@
 import GameObject from "./GameObject.js";
 import Game from "./game.js";
 import PhysicsManager from "./Physics2D/Physics/PhysicsManager.js";
+import EventManager from "./Event/EventManager.js";
+import Receiver from "./Event/Receiver.js";
+import Emitter from "./Event/Emitter.js";
 
 /** Houses the gameobjects and other important components. */
 export default class Scene
@@ -8,6 +11,9 @@ export default class Scene
     #game;
     #gameObjects;
     #physics;
+    #eventManager;
+    #emitter;
+    #receiver;
 
     /**
      * Creates a new scene.
@@ -19,6 +25,9 @@ export default class Scene
         this.#game = game;
         this.#gameObjects = gameObjects;
         this.#physics = new PhysicsManager(this);
+        this.#eventManager = new EventManager(this);
+        this.#receiver = new Receiver(this.#eventManager, this);
+        this.#emitter = new Emitter(this.#eventManager, this);
         this.create();
     }
 
@@ -30,7 +39,8 @@ export default class Scene
         //update all the gameobjects.
         for(let obj of this.#gameObjects)
         {
-            obj.preUpdate(deltaT);
+            if(obj.isUpdateable())
+                obj.preUpdate(deltaT);
         }
         this.update(deltaT);
         this.#physics.update(deltaT);
@@ -64,6 +74,7 @@ export default class Scene
      */
     remove(gameObject)
     {
+        //console.log(gameObject);
         let idx = this.#gameObjects.indexOf(gameObject);
         if(idx !== -1)
         {
@@ -81,6 +92,15 @@ export default class Scene
     }
 
     /**
+     * Gets the eventManager.
+     * @returns {EventManager} The eventManager.
+     */
+    getEventManager()
+    {
+        return this.#eventManager;
+    }
+
+    /**
      * Gets the game instance on the scene.
      * @returns {Game} The scene's game instance.
      */
@@ -91,6 +111,24 @@ export default class Scene
      * @returns {GameObject[]} The game objects.
      */
     getGameObjects(){return this.#gameObjects};
+
+    /**
+     * Gets the emitter that is used to send events.
+     * @returns {Emitter} The emitter.
+     */
+    getEmitter()
+    {
+        return this.#emitter;
+    }
+
+    /**
+     * Gets the receiver that is used to subscribe to events and receiver events.
+     * @returns {Receiver} The receiver.
+     */
+    getReceiver()
+    {
+        return this.#receiver;
+    }
 
 }
 

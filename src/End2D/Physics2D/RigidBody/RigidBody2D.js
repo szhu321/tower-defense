@@ -59,6 +59,26 @@ export default class RigidBody2D extends Component
     setPosition(position){this.#position = position;}
 
     /**
+     * Sets the x position of this rigidbody. Automatically sets the position of the gameObject.
+     * @param {number} x - The x value.
+     */
+    setPositionX(x)
+    {
+        this.#position.setX(x);
+        this.getGameObject().setX(x);
+    }
+
+    /**
+     * Sets the y position of this rigidbody. Automatically sets the position of the gameObject.
+     * @param {number} y - The y value.
+     */
+    setPositionY(y)
+    {
+        this.#position.setY(y);
+        this.getGameObject().setY(y);
+    }
+
+    /**
      * Sets the rotation of this rigidBody in degrees.
      * @param {number} rotation - The rotation.
      */

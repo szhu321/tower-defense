@@ -30,6 +30,8 @@ export default class Receiver
     {
         this.#eventManager = eventManager;
         this.#owner = owner;
+        //adds this new receiver to the eventManager.
+        this.#eventManager.addReceiver(this);
     }
 
     /**

@@ -29,6 +29,8 @@ export default class GameLevel extends Scene
         
         // let circ = new Circle();
         // console.log(circ.getRadius());
+
+        this.getPhysics().addOverLap("player", "enemy", this.playerHitEnemy, this);
     }
 
     update(deltaT)
@@ -51,5 +53,14 @@ export default class GameLevel extends Scene
     {
         let enemy = new Enemy(this);
         enemy.setPosition(x, y);
+    }
+
+    playerHitEnemy(player, enemy)
+    {
+        console.log(player);
+        console.log(enemy);
+        enemy.setVisible(false);
+        enemy.setUpdateable(false);
+        enemy.getComponent("rigidBody").setCollidable(false);
     }
 }

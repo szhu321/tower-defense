@@ -16,6 +16,7 @@ export default class EventManager
     constructor(scene)
     {
         this.#scene = scene;
+        this.#receivers = [];
     }
 
     /**
@@ -42,5 +43,14 @@ export default class EventManager
     getScene()
     {
         return this.#scene;
+    }
+
+    /**
+     * Adds a reciever to this eventManager.
+     * @param {Receiver} receiver - The receiver.
+     */
+    addReceiver(receiver)
+    {
+        this.#receivers.push(receiver);
     }
 }

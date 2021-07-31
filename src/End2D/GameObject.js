@@ -1,6 +1,8 @@
 import Component from "./Component/Component.js";
 import Vec2 from "./Utilities/Vec2.js";
 import Scene from "./scene.js";
+import Emitter from "./Event/Emitter.js";
+import Receiver from "./Event/Receiver.js";
 
 export default class GameObject
 {
@@ -18,9 +20,19 @@ export default class GameObject
      * @type {Component[]} An array of this gameObject's components.
      */
     #components;
+    #emitter;
+    #receiver;
     
     //collidable = false;
 
+    /**
+     * Creates a new gameObject. The game object is not automatically added to the scene.
+     * @param {Scene} scene - The scene.
+     * @param {number} [x=0] - The x value.
+     * @param {number} [y=0] - The y value.
+     * @param {number} [width=50] - The width.
+     * @param {number} [height=50] - The height.
+     */
     constructor(scene, x=0, y=0, width = 50, height = 50)
     {
         this.#scene = scene;
@@ -30,6 +42,8 @@ export default class GameObject
         this.#components = new Array();
         this.#width = width;
         this.#height = height;
+        this.#emitter = new Emitter(this.#scene.getEventManager(), this);
+        this.#receiver = new Receiver(this.#scene.getEventManager(), this);
     }
 
     /**
@@ -79,7 +93,7 @@ export default class GameObject
     }
     
     /**
-     * Sets the x position.
+     * Sets the x position. This is the centerX of the gameObject.
      * @param {number} x - The x value.
      */
     setX(x)
@@ -88,12 +102,12 @@ export default class GameObject
         let rb = this.getComponent("rigidBody");
         if(rb)
         {
-            rb.getPosition().setX(x + this.#width/2);
+            rb.getPosition().setX(x);
         }
     }
 
     /**
-     * Sets the y position.
+     * Sets the y position. This is the centerY of the gameObject.
      * @param {number} y - The x value.
      */
     setY(y)
@@ -102,7 +116,7 @@ export default class GameObject
         let rb = this.getComponent("rigidBody");
         if(rb)
         {
-            rb.getPosition().setY(y + this.#height/2);
+            rb.getPosition().setY(y);
         }
     }
 
@@ -115,7 +129,7 @@ export default class GameObject
     }
 
     /**
-     * Gets the x value. Same as running getPosition().getX().
+     * Gets the x value. Same as running getPosition().getX(). This is the centerX of the gameObject.
      * @returns {number} The x value.
      */
     getX()
@@ -124,7 +138,7 @@ export default class GameObject
     }
 
     /**
-     * Gets the y value. Same as running getPosition().getY().
+     * Gets the y value. Same as running getPosition().getY(). This is the centerY of the gameObject.
      * @returns {number} The y value.
      */
     getY()
@@ -266,10 +280,26 @@ export default class GameObject
         //overridden by child class
     }
 
+    /**
+     * Adds the component in order of decreasing priority.
+     * @param {Component} component - The component.
+     */
     addComponent(component)
     {
-        this.#components.push(component);
+        //insertion sort. Not really.
+        //this.#components.push(component);
+        let idx = 0;
+        for(let i = this.#components.length - 1; i >= 0; i--)
+        {
+            if(this.#components[i].getPriority() >= component.getPriority())
+            {
+                idx = i + 1;
+            }
+        }
+        this.#components.splice(idx, 0, component);
+        //console.log(this.#components);
     }
+
 
     /**
      * Gets a component of this game object.
@@ -284,5 +314,23 @@ export default class GameObject
                 return c;
         }
         return null;
+    }
+
+    /**
+     * Gets the emitter that is used to send events.
+     * @returns {Emitter} The emitter.
+     */
+    getEmitter()
+    {
+        return this.#emitter;
+    }
+ 
+     /**
+      * Gets the receiver that is used to subscribe to events and receiver events.
+      * @returns {Receiver} The receiver.
+      */
+    getReceiver()
+    {
+        return this.#receiver;
     }
 }

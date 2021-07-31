@@ -9,7 +9,7 @@ export default class Follow extends State
         let enemy = this.getGameObject();
 
         let direction = new Vec2(player.getX() - enemy.getX(), player.getY() - enemy.getY());
-        console.log(direction.getX(), direction.getY());
+        //console.log(direction.getX(), direction.getY());
         direction.normalize();
         direction.mult(enemy.speed * deltaT);
 

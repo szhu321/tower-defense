@@ -8,6 +8,7 @@ export default class Collider2D
     #offset;
     #hitbox; //aabb
     #hitboxType;
+    #gameObject;
 
     /**
      * Creates a new collider with an aabb.
@@ -20,6 +21,7 @@ export default class Collider2D
         this.#offset = new Vec2();
         this.#hitbox = new AABB(min, max, rigidBody);
         this.#hitboxType = "aabb";
+        this.#gameObject = rigidBody.getGameObject();
     }
 
     /**
@@ -69,6 +71,16 @@ export default class Collider2D
     {
         this.#hitboxType = hitboxType;
         this.#hitbox = hitbox;
+    }
+
+
+    /**
+     * Gets the gameObject that this collider is attatched to.
+     * @returns {GameObject} The gameObject.
+     */
+    getGameObject()
+    {
+        return this.#gameObject;
     }
 
 

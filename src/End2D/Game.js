@@ -113,7 +113,7 @@ export default class Game
                         ctx.fillStyle = "white";
                     else
                         ctx.fillStyle = "white";
-                    ctx.fillRect(node.getX(), node.getY(), node.getWidth(), node.getHeight());
+                    ctx.fillRect(node.getX() - node.getWidth()/2, node.getY() - node.getHeight()/2, node.getWidth(), node.getHeight());
                 }
             });
         }
@@ -151,7 +151,7 @@ export default class Game
 
         for(let i = 0; i < go.length; i++)
         {
-            let pos = go[i].getPosition().clone().add(new Vec2(go[i].getWidth()/2, go[i].getHeight()/2));
+            let pos = go[i].getPosition().clone();
             let v = go[i].getVelocity().clone().mult(6);
             let line = new Line(pos, pos.clone().add(v));
             DebugDraw.drawLine(ctx, line, "blue");
