@@ -20,11 +20,6 @@ export default class Overlap
         this.#groupTwo = groupTwo;
         this.#callback = callback;
         this.#context = context;
-
-        if(this.#context)
-        {
-            this.#context.end2DTempCallback = callback;
-        }
     }
 
     /**
@@ -46,7 +41,7 @@ export default class Overlap
     }
 
     /**
-     * 
+     * Runs the callback function with the provided context or with this overlap as the context.
      * @param {GameObject} gameObject1 - The first gameObject.
      * @param {GameObject} gameObject2 - The second gameObject.
      */
@@ -54,7 +49,11 @@ export default class Overlap
     {
         if(this.#context)
         {
+            //store the function alreay in end2DTempCallback so that it can be restored later.
+            let temp = this.#context.end2DTempCallback;
+            this.#context.end2DTempCallback = this.#callback;
             this.#context.end2DTempCallback(gameObject1, gameObject2);
+            this.#context.end2DTempCallback = temp;
         }
         else
         {

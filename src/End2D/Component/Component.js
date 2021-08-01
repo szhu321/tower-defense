@@ -27,7 +27,7 @@ export default class Component
 
     /**
      * Updates this component.
-     * @param {number} deltaT - The time passed since last frame.
+     * @param {number} deltaT - The time passed since last frame in seconds.
      */
     update(deltaT)
     {
@@ -59,5 +59,14 @@ export default class Component
     getPriority()
     {
         return this.#priority;
+    }
+
+    /**
+     * Destroy this component by setting the gameObject to null.
+     * Child classes can further this functionality by doing further cleanup.
+     */
+    destroy()
+    {
+        this.#gameObject = null;
     }
 }

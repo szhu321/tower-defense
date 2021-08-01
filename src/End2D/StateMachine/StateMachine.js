@@ -22,6 +22,10 @@ export default class StateMachine {
      */
     #previousState;
 
+    #created;
+    #end2DGameObject;
+    #end2DData;
+
 
     /**
      * Creates a new StateMachine and initialize the variables for the state machine. 
@@ -32,7 +36,10 @@ export default class StateMachine {
         this.#states = [];
         this.#currentState = null;
         this.#previousState = null;
-        this.create(gameObject, data);
+        this.#created = false;
+        this.#end2DGameObject = gameObject;
+        this.#end2DData = data;
+        // this.create(gameObject, data);
     }
 
 
@@ -96,6 +103,13 @@ export default class StateMachine {
      * @param {number} deltaT - Change in time.
      */
     update(deltaT) {
+        if(!this.#created)
+        {
+            this.#created = true;
+            this.create(this.#end2DGameObject, this.#end2DData);
+            this.#end2DGameObject = undefined;
+            this.#end2DData = undefined;
+        }
         if (this.#currentState)
             this.#currentState.update(deltaT);
     }

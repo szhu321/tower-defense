@@ -6,7 +6,7 @@ import WorldBound from "../../End2D/Component/WorldBound.js";
 
 export default class Enemy extends GameObject
 {
-    speed = 35;
+    speed = 70;
     scene;
 
     /**
@@ -22,6 +22,7 @@ export default class Enemy extends GameObject
         this.addComponent(new RigidBody2D(this));
         this.addComponent(new WorldBound(this, scene.getGame().getScreenWidth(), scene.getGame().getScreenHeight()));
 
+        //console.log(scene.player);
         this.ai = new EnemyController(this, {
             player:scene.player,
         });

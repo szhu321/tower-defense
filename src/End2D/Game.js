@@ -76,7 +76,8 @@ export default class Game
     }
 
     /**
-     * The update of the game loop.
+     * Updates the game logic.
+     * @param {number} deltaT - The change in time in seconds.
      */
     tick(deltaT)
     {

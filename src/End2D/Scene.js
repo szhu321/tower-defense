@@ -14,6 +14,7 @@ export default class Scene
     #eventManager;
     #emitter;
     #receiver;
+    #created;
 
     /**
      * Creates a new scene.
@@ -28,14 +29,20 @@ export default class Scene
         this.#eventManager = new EventManager(this);
         this.#receiver = new Receiver(this.#eventManager, this);
         this.#emitter = new Emitter(this.#eventManager, this);
-        this.create();
+        this.#created = false;
+        //this.create();
     }
 
     /**does some update before calling the actual update method. 
-     * @param {number} deltaT - The time that passed since the last update.
+     * @param {number} deltaT - The time that passed in milliseconds since the last update.
     */
     preUpdate(deltaT)
     {
+        if(!this.#created)
+        {
+            this.#created = true;
+            this.create();
+        }
         //update all the gameobjects.
         for(let obj of this.#gameObjects)
         {
@@ -53,7 +60,7 @@ export default class Scene
     }
 
     /** update the scene, as well as all the gameObjects on the scene. Will be called by game every tick.
-     * @param {number} deltaT - The time that passed since the last update.
+     * @param {number} deltaT - The time that passed in seconds since the last update.
     */
     update(deltaT)
     {

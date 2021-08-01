@@ -275,6 +275,10 @@ export default class GameObject
         this.update(deltaT);
     }
 
+    /**
+     * Updates the game object. To be overridden by child classes.
+     * @param {number} deltaT - The time that passed in seconds.
+     */
     update(deltaT)
     {
         //overridden by child class
@@ -332,5 +336,20 @@ export default class GameObject
     getReceiver()
     {
         return this.#receiver;
+    }
+
+    /**
+     * Destroys this game object by removing it from all game systems and destroying all its components.
+     */
+    destroy()
+    {
+        //first remove it from the scene.
+        this.#scene.remove(this);
+        //then destroy all components.
+        while(this.#components.length > 0)
+        {
+            let currentComponent = this.#components.pop();
+            currentComponent.destroy();
+        }
     }
 }

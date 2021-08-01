@@ -3,6 +3,7 @@ import DebugDraw from "../../Rendering/DebugDraw.js";
 import CollisionDetector2D from "../RigidBody/CollisionDetector2D.js";
 import Overlap from "./Overlap.js";
 import CollisionResult from "./CollisionResult.js";
+import Scene from "../../scene.js";
 
 export default class PhysicsManager
 {
@@ -44,19 +45,42 @@ export default class PhysicsManager
         return this.#gameObjects;
     }
 
+    /**
+     * Adds a gameObject to the physics system. Game object must have a rigidBody component. 
+     * Adding a rigidBody component to the gameObject will automatically add the gameObject to this physics system.
+     * @param {GameObject} gameObject - The gameObject.
+     */
     addGameObject(gameObject)
     {
         this.#gameObjects.push(gameObject);
     }
 
+    /**
+     * Removes a gameObject from the physics system. 
+     * Does nothing if the gameObject is not found in the system.
+     * @param {GameObject} gameObject - The game object.
+     */
     removeGameObject(gameObject)
     {
-        //TODO:
+        let idx = this.#gameObjects.indexOf(gameObject);
+        if(idx !== -1)
+        {
+            this.#gameObjects.splice(idx, 1);
+        }
+    }
+
+    /**
+     * Gets the scene that this physicsManager is connected to.
+     * @returns {Scene} The scene.
+     */
+    getScene()
+    {
+        return this.#scene;
     }
 
     /**
      * Updates all the physics of the included gameObjects.
-     * @param {number} deltaT - The change in time.
+     * @param {number} deltaT - The change in time in seconds.
      */
     update(deltaT)
     {

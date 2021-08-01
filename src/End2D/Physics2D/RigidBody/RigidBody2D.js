@@ -129,4 +129,11 @@ export default class RigidBody2D extends Component
         this.#position.setY(objPos.getY() + this.getGameObject().getHeight() / 2);
         
     }
+
+    destroy()
+    {
+        //first remove the gameObject from the physics system.
+        this.getGameObject().getScene().getPhysics().removeGameObject(this.getGameObject());
+        super.destroy();
+    }
 }

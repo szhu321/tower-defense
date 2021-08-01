@@ -41,7 +41,7 @@ export default class SceneManager
 
     /**
      * This preupdate calls the current scene's preUpdate method.
-     * @param {number} deltaT - The time passed since last update.
+     * @param {number} deltaT - The time passed in seconds since last update.
      */
     preUpdate(deltaT)
     {
