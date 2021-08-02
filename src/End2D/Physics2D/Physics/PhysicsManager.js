@@ -1,9 +1,9 @@
-import GameObject from "../../GameObject.js";
+import GameObject from "../../GameObject/GameObject.js";
 import DebugDraw from "../../Rendering/DebugDraw.js";
 import CollisionDetector2D from "../RigidBody/CollisionDetector2D.js";
 import Overlap from "./Overlap.js";
 import CollisionResult from "./CollisionResult.js";
-import Scene from "../../scene.js";
+import Scene from "../../Scene/Scene.js";
 
 export default class PhysicsManager
 {

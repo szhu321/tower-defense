@@ -1,4 +1,4 @@
-import GameObject from "../GameObject.js";
+import GameObject from "../GameObject/GameObject.js";
 import StateMachine from "./StateMachine.js";
 
 export default class State

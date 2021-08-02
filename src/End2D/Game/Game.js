@@ -1,11 +1,11 @@
-import Input from "./Input.js";
-import SceneManager from "./SceneManager.js";
-import Scene from "./Scene.js";
-import CollisionResult from "./Physics2D/Physics/CollisionResult.js";
-import CollisionDetector2D from "./Physics2D/RigidBody/CollisionDetector2D.js";
-import DebugDraw from "./Rendering/DebugDraw.js";
-import Vec2 from "./Utilities/Vec2.js";
-import Line from "./Physics2D/Primitives/Line.js";
+import Input from "../Input/Input.js";
+import SceneManager from "../Scene/SceneManager.js";
+import Scene from "../Scene/Scene.js";
+import CollisionResult from "../Physics2D/Physics/CollisionResult.js";
+import CollisionDetector2D from "../Physics2D/RigidBody/CollisionDetector2D.js";
+import DebugDraw from "../Rendering/DebugDraw.js";
+import Vec2 from "../Utilities/Vec2.js";
+import Line from "../Physics2D/Primitives/Line.js";
 
 /** The main entry point into a game */
 export default class Game

@@ -1,8 +1,9 @@
+import ClickComponent from "../../End2D/Component/ClickComponent.js";
 import PlayerController from "../../End2D/Component/PlayerController.js";
 import WorldBound from "../../End2D/Component/WorldBound.js";
-import GameObject from "../../End2D/GameObject.js";
+import GameObject from "../../End2D/GameObject/GameObject.js";
 import RigidBody2D from "../../End2D/Physics2D/RigidBody/RigidBody2D.js";
-import Scene from "../../End2D/Scene.js";
+import Scene from "../../End2D/Scene/Scene.js";
 import Enemy from "../Entities/Enemy.js";
 
 
@@ -55,20 +56,23 @@ export default class GameLevel extends Scene
 
     addPlayer()
     {
-        console.log(this);
-        console.log(this["player"]);
+        //console.log(this);
+        //console.log(this["player"]);
 
         this.player = new GameObject(this);
-        console.log(this);
-        console.log(this.player);
+        //console.log(this);
+        //console.log(this.player);
         this.player.setGroup("player");
         this.player.setPosition(50, 50);
         this.add(this.player);
         this.player.addComponent(new PlayerController(this.player));
         this.player.addComponent(new RigidBody2D(this.player));
         this.player.addComponent(new WorldBound(this.player, this.getGame().getScreenWidth(), this.getGame().getScreenHeight()));
+        this.player.addComponent(new ClickComponent(this.player, () => {
+            console.log("player clicked");
+        }));
 
-        console.log(this);
+        //console.log(this);
         
     }
 
@@ -76,6 +80,15 @@ export default class GameLevel extends Scene
     {
         let enemy = new Enemy(this);
         enemy.setPosition(x, y);
+        enemy.addComponent(new ClickComponent(enemy, (enemy) => {
+            console.log("enemy clicked");
+            let ded = Math.random();
+            enemy.knockBack();
+            if(ded < 0.1)
+            {
+                enemy.destroy();
+            }
+        }))
     }
 
     playerHitEnemy(player, enemy)

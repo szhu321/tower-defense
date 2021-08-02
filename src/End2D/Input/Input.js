@@ -1,4 +1,8 @@
-import Vec2 from "./Utilities/Vec2.js";
+import Emitter from "../Event/Emitter.js";
+import EventManager from "../Event/EventManager.js";
+import Receiver from "../Event/Receiver.js";
+import Vec2 from "../Utilities/Vec2.js";
+import Event from "../Event/Event.js";
 
 export default class Input
 {
@@ -8,8 +12,19 @@ export default class Input
     static #mousePressed = false;
 
     /**
+     * @type {Emitter} The emitter.
+     */
+    static #emitter;
+
+    /**
+     * @type {Receiver} The receiver.
+     */
+    static #receiver;
+
+    /**
      * Sets up the Input Engine by attching some listeners to the canvas.
      * @param {HTMLCanvasElement} - The canvas.
+     * @param {EventManager} - The event Manager.
      */
     static initialize(canvas)
     {
@@ -22,7 +37,9 @@ export default class Input
             Input.#keys[e.key] = false;
         }, false);
         canvasElement.addEventListener("click", (e)=> {
-            //TODO: add a click event to the event queue.
+            //add a click event to the event queue.
+            let data = {event: e};
+            this.#emitter.fireEvent("click", data);
         }, false);
         canvasElement.addEventListener("mousemove", (e)=>
         {
@@ -39,6 +56,12 @@ export default class Input
             Input.#mousePressed = false;
         });
         
+    }
+
+    static initializeEventSystem(eventManager)
+    {
+        this.#emitter = new Emitter(eventManager, null);
+        this.#receiver = new Receiver(eventManager, null);
     }
 
     /**returns the mouse position inside a dictionary. x for x position, y for y position. 

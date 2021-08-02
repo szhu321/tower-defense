@@ -1,9 +1,10 @@
-import GameObject from "./GameObject.js";
-import Game from "./game.js";
-import PhysicsManager from "./Physics2D/Physics/PhysicsManager.js";
-import EventManager from "./Event/EventManager.js";
-import Receiver from "./Event/Receiver.js";
-import Emitter from "./Event/Emitter.js";
+import GameObject from "../GameObject/GameObject.js";
+import Game from "../Game/Game.js";
+import PhysicsManager from "../Physics2D/Physics/PhysicsManager.js";
+import EventManager from "../Event/EventManager.js";
+import Receiver from "../Event/Receiver.js";
+import Emitter from "../Event/Emitter.js";
+import Input from "../Input/Input.js";
 
 /** Houses the gameobjects and other important components. */
 export default class Scene
@@ -30,6 +31,7 @@ export default class Scene
         this.#receiver = new Receiver(this.#eventManager, this);
         this.#emitter = new Emitter(this.#eventManager, this);
         this.#created = false;
+        Input.initializeEventSystem(this.#eventManager);
         //this.create();
     }
 

@@ -1,4 +1,6 @@
-import GameObject from "../GameObject.js";
+import GameObject from "../GameObject/GameObject.js";
+import Emitter from "../Event/Emitter.js";
+import Receiver from "../Event/Receiver.js";
 
 
 /** components can be added to gameObjects to provide some additional functionality.*/
@@ -12,6 +14,8 @@ export default class Component
      */
     #name; 
     #priority;
+    #emitter;
+    #receiver;
 
     /**
      * Creates a new Component object to be attached to gameObjects. Components are like a shell with an update method.
@@ -23,6 +27,8 @@ export default class Component
         this.#gameObject = gameObject;
         this.#name = name;
         this.#priority = 0;
+        this.#emitter = new Emitter(this.#gameObject.getScene().getEventManager(), this);
+        this.#receiver = new Receiver(this.#gameObject.getScene().getEventManager(), this);
     }
 
     /**
@@ -59,6 +65,24 @@ export default class Component
     getPriority()
     {
         return this.#priority;
+    }
+
+    /**
+     * Gets the emitter that is used to send events.
+     * @returns {Emitter} The emitter.
+     */
+    getEmitter()
+    {
+        return this.#emitter;
+    }
+  
+      /**
+       * Gets the receiver that is used to subscribe to events and receiver events.
+       * @returns {Receiver} The receiver.
+       */
+    getReceiver()
+    {
+        return this.#receiver;
     }
 
     /**

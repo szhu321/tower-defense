@@ -1,6 +1,6 @@
 import Scene from "./Scene.js";
-import Game from "./game.js";
-import GameObject from "./GameObject.js";
+import Game from "../Game/Game.js";
+import GameObject from "../GameObject/GameObject.js";
 
 /**The sceneManager takes care of storing the current scene */
 export default class SceneManager

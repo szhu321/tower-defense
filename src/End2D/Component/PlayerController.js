@@ -1,11 +1,11 @@
-import Input from "../Input.js";
+import Input from "../Input/Input.js";
 import Component from "./Component.js";
 
 export default class PlayerController extends Component
 {
     constructor(gameObject)
     {
-        super(gameObject, "PlayerController");
+        super(gameObject, "playerController");
     }
 
     update(deltaT)

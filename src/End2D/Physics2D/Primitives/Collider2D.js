@@ -1,4 +1,4 @@
-import GameObject from "../../GameObject.js"
+import GameObject from "../../GameObject/GameObject.js"
 import Vec2 from "../../Utilities/Vec2.js";
 import RigidBody2D from "../RigidBody/RigidBody2D.js";
 import AABB from "./AABB.js";

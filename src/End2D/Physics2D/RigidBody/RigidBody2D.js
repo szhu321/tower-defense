@@ -1,4 +1,4 @@
-import GameObject from "../../GameObject.js";
+import GameObject from "../../GameObject/GameObject.js";
 import Vec2 from "../../Utilities/Vec2.js";
 import Component from "../../Component/Component.js";
 import Collider2D from "../Primitives/Collider2D.js";

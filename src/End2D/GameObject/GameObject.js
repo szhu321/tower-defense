@@ -1,8 +1,8 @@
-import Component from "./Component/Component.js";
-import Vec2 from "./Utilities/Vec2.js";
-import Scene from "./scene.js";
-import Emitter from "./Event/Emitter.js";
-import Receiver from "./Event/Receiver.js";
+import Component from "../Component/Component.js";
+import Vec2 from "../Utilities/Vec2.js";
+import Scene from "../Scene/Scene.js";
+import Emitter from "../Event/Emitter.js";
+import Receiver from "../Event/Receiver.js";
 
 export default class GameObject
 {

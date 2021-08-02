@@ -1,4 +1,4 @@
-import Game from "./End2D/game.js";
+import Game from "./End2D/Game/Game.js";
 import GameLevel from "./TowerDefense/Scenes/GameLevel.js";
 
 /**Creates a Game and starts with with a default scene. */
