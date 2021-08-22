@@ -8,6 +8,7 @@ export default class GameObject
 {
     #name = "GameObject";
     #group = "none";
+    #renderingType;
     #position;
     #velocity;
     #visible = true;
@@ -336,6 +337,24 @@ export default class GameObject
     getReceiver()
     {
         return this.#receiver;
+    }
+
+    /**
+     * Gets the type of object this gameObject will be rendered as.
+     * @returns {string} The renderingType.
+     */
+    getRenderingType()
+    {
+        return this.#renderingType;
+    }
+
+    /**
+     * Sets the renderingType of this object.
+     * @param {string} type - The type. 
+     */
+    setRenderingType(type)
+    {
+        this.#renderingType = type;
     }
 
     /**

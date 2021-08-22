@@ -1,5 +1,6 @@
 import Game from "./End2D/Game/Game.js";
 import GameLevel from "./TowerDefense/Scenes/GameLevel.js";
+import Menu from "./TowerDefense/Scenes/Menu.js";
 
 /**Creates a Game and starts with with a default scene. */
 function initialize()
@@ -13,7 +14,7 @@ function initialize()
     }
 
     let game = new Game(config);
-    game.startGame(GameLevel);
+    game.startGame(Menu);
 
 }
 

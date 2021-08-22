@@ -106,15 +106,43 @@ export default class Game
             data.forEach(node => {
                 if(node.isVisible())
                 {
-                    if(node.type == "player")
-                        ctx.fillStyle = "green";
-                    else if(node.type == "enemy")
-                        ctx.fillStyle = "red";
-                    else if(node.type == "bullet")
-                        ctx.fillStyle = "white";
+                    ctx.save();
+                    if(node.getRenderingType() === "Rectangle")
+                    {
+                        let color = node.getColor();
+                        if(color)
+                            ctx.fillStyle = color;
+                        else
+                            ctx.fillStyle = "#ffffff";
+                        ctx.fillRect(node.getX() - node.getWidth()/2, node.getY() - node.getHeight()/2, node.getWidth(), node.getHeight());
+                    }
+                    else if(node.getRenderingType() === "Text")
+                    {
+                        let text = node.getText();
+                        let color = node.getColor();
+                        if(color)
+                            ctx.fillStyle = color;
+                        else
+                            ctx.fillStyle = "#ffffff";
+                        ctx.font = "bold 48px arial";
+                        ctx.textBaseline = "middle";
+                        ctx.textAlign = "center";
+                        ctx.fillText(text, node.getX(), node.getY());
+                        //console.log(text);
+                    }
                     else
-                        ctx.fillStyle = "white";
-                    ctx.fillRect(node.getX() - node.getWidth()/2, node.getY() - node.getHeight()/2, node.getWidth(), node.getHeight());
+                    {
+                        if(node.type == "player")
+                            ctx.fillStyle = "green";
+                        else if(node.type == "enemy")
+                            ctx.fillStyle = "red";
+                        else if(node.type == "bullet")
+                            ctx.fillStyle = "white";
+                        else
+                            ctx.fillStyle = "white";
+                        ctx.fillRect(node.getX() - node.getWidth()/2, node.getY() - node.getHeight()/2, node.getWidth(), node.getHeight());
+                    }
+                    ctx.restore();
                 }
             });
         }
